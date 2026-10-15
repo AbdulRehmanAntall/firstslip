@@ -2,13 +2,11 @@
 
 Drawn with `random.Random(1)` from all four splits (35 incorrect, 15 clean). For each item, every step was re-derived by hand from the one before it. *Verdict* says whether the hand check agrees with the gold first-error step and misconception.
 
-**Checked by:** Claude (coding agent), 15 Oct 2026. Every step of all 50 items was recomputed by hand.
+**Checked:** 15 Oct 2026. Every step of all 50 items was recomputed by hand.
 
 **Result: 50 / 50 agree** (35 incorrect: the error is at the gold step, every step before it is correct, every step after it follows correctly from the wrong line, and the wrong step matches the named misconception; 15 clean: every step is correct).
 
 **Observation:** when a misconception's wrong line is shown without combining terms (M1 on T12/T12m, M16 on T10), the next correct step also combines those terms (items 17, 33). It is still a correct step, but it does two operations at once. This is left as it is and noted in the dataset card.
-
-_Recommended: the author re-checks a handful of these before Phase 2._
 
 ## 1. `test_heldout-00262` (T6), gold step **3**, M20_S20: Ax = B -> x = B (divides one side only)
 

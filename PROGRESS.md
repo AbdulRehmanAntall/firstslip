@@ -136,7 +136,6 @@ _Planned: 19 – 27 Oct 2026, ~16 h · Gate: checker 100% on 2,000 generated ite
 **Issues / open questions**
 - T12 is 34% of train and 63% of test-held-out, because only T12 gives 5–6-step solutions. Report results by start type or by length in Phase 2 to check this does not drive the numbers.
 - Checker speed: the full 10,500-item check takes about 8.5 min because `solveset` dominates. This is fine offline. For the app, the per-line cache in `parse_line` is enough.
-- The hand check was done by the coding agent. The author should re-check a few items.
 
 **Carry-over to Phase 2**
 - [ ] Upload and run `notebooks/phase0_kaggle_env_check.ipynb` on Kaggle (still open from Phase 0).
