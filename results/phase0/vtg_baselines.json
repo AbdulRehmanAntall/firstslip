@@ -1,0 +1,155 @@
+{
+  "config": {
+    "dataset": "eth-nlped/stepverify",
+    "split_seed": 20261016,
+    "bootstrap": 10000,
+    "step_convention": "1-based, 0 = no error"
+  },
+  "position_prior": {
+    "4": 1,
+    "5": 3,
+    "6": 3,
+    "7": 1,
+    "8": 5,
+    "9": 3,
+    "10": 2,
+    "13": 5
+  },
+  "position_fallback": 3,
+  "eval": {
+    "vtg_test": {
+      "random_expected": {
+        "first_error_acc": 0.18238306788805542,
+        "within_one_acc": 0.5019189663204626
+      },
+      "random_sampled": {
+        "n": 802,
+        "first_error_acc": 0.21072319201995013,
+        "ci95": [
+          0.18329177057356608,
+          0.23940149625935161
+        ],
+        "within_one_acc": 0.49002493765586036,
+        "within_one_ci95": [
+          0.456359102244389,
+          0.5249376558603491
+        ]
+      },
+      "position_only": {
+        "n": 802,
+        "first_error_acc": 0.24937655860349128,
+        "ci95": [
+          0.2194513715710723,
+          0.2793017456359102
+        ],
+        "within_one_acc": 0.655860349127182,
+        "within_one_ci95": [
+          0.6221945137157108,
+          0.6882793017456359
+        ]
+      }
+    },
+    "vtg_test_no_nota": {
+      "random_expected": {
+        "first_error_acc": 0.1836749614719228,
+        "within_one_acc": 0.5050199800199799
+      },
+      "random_sampled": {
+        "n": 724,
+        "first_error_acc": 0.1643646408839779,
+        "ci95": [
+          0.13674033149171272,
+          0.1919889502762431
+        ],
+        "within_one_acc": 0.46685082872928174,
+        "within_one_ci95": [
+          0.42955801104972374,
+          0.5041436464088398
+        ]
+      },
+      "position_only": {
+        "n": 724,
+        "first_error_acc": 0.2472375690607735,
+        "ci95": [
+          0.21685082872928177,
+          0.2776243093922652
+        ],
+        "within_one_acc": 0.6574585635359116,
+        "within_one_ci95": [
+          0.6215469613259669,
+          0.6919889502762431
+        ]
+      }
+    },
+    "vtg_all": {
+      "random_expected": {
+        "first_error_acc": 0.18231632528039712,
+        "within_one_acc": 0.5010407451275715
+      },
+      "random_sampled": {
+        "n": 1002,
+        "first_error_acc": 0.19560878243512975,
+        "ci95": [
+          0.17165668662674652,
+          0.22055888223552894
+        ],
+        "within_one_acc": 0.5,
+        "within_one_ci95": [
+          0.469061876247505,
+          0.530938123752495
+        ]
+      },
+      "position_only": {
+        "n": 1002,
+        "first_error_acc": 0.26447105788423153,
+        "ci95": [
+          0.23750000000000002,
+          0.29241516966067865
+        ],
+        "within_one_acc": 0.6596806387225549,
+        "within_one_ci95": [
+          0.6307385229540918,
+          0.688622754491018
+        ]
+      }
+    },
+    "vtg_test_by_category": {
+      "Calculation error easily solved by a calculator": {
+        "n": 93,
+        "position_only_acc": 0.26881720430107525,
+        "random_expected_acc": 0.18548387096774194
+      },
+      "Extra quantity or Missing quantity": {
+        "n": 202,
+        "position_only_acc": 0.20297029702970298,
+        "random_expected_acc": 0.1870873900576871
+      },
+      "Missing / Wrong factual knowledge": {
+        "n": 110,
+        "position_only_acc": 0.2727272727272727,
+        "random_expected_acc": 0.18036806627715718
+      },
+      "Misunderstanding of a question": {
+        "n": 227,
+        "position_only_acc": 0.27312775330396477,
+        "random_expected_acc": 0.18305050309455595
+      },
+      "None of the above": {
+        "n": 78,
+        "position_only_acc": 0.2692307692307692,
+        "random_expected_acc": 0.1703916453916454
+      },
+      "Reached correct solution but proceeded further": {
+        "n": 53,
+        "position_only_acc": 0.3018867924528302,
+        "random_expected_acc": 0.18779642789076753
+      },
+      "Unit conversion error": {
+        "n": 39,
+        "position_only_acc": 0.1282051282051282,
+        "random_expected_acc": 0.16904761904761903
+      }
+    }
+  },
+  "run_log": "20261015T124346Z_phase0_vtg_baselines.jsonl"
+}

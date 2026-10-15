@@ -53,25 +53,25 @@ Complete, step-by-step plan derived from the project proposal. Every phase lists
 ## Phase 0 — Setup and core reading (16 – 18 Oct, ~6 h + reading)
 
 ### Tasks
-- [ ] Create the GitHub repository.
-- [ ] Create a Python environment with **pinned versions** (e.g. `requirements.txt` / lock file).
-- [ ] Create a Kaggle notebook with **GPU enabled** (2 × T4); confirm Colab free tier works as backup.
-- [ ] Load **VtG** from Hugging Face ([`eth-nlped/stepverify`](https://huggingface.co/datasets/eth-nlped/stepverify), 1,002 rows, CC BY 4.0: first error index, error category, teacher description).
-- [ ] Inspect **30 VtG rows by hand** and note observations.
-- [ ] Split VtG: **VtG dev = random 200 rows** (prompt format only, never used for training), **VtG test = remaining 802 rows**. Fix and record the seed.
-- [ ] Compute the **random baseline** on VtG.
-- [ ] Compute the **position-only baseline** on VtG (guess the most common error step for a given solution length).
-- [ ] Read items **A1–A5** of the reading list (~8 h).
-- [ ] Write `PREREGISTRATION.md` containing:
-  - [ ] RQ1–RQ4 and all hypotheses (H1, H1b, H2, H2b, H3 + anti-hypothesis, H4, H4b — see below)
-  - [ ] The **held-out misconception choice**: one misconception from each family —
+- [x] Create the GitHub repository.
+- [x] Create a Python environment with **pinned versions** (e.g. `requirements.txt` / lock file).
+- [ ] Create a Kaggle notebook with **GPU enabled** (2 × T4); confirm Colab free tier works as backup. *(Notebook written: `notebooks/phase0_kaggle_env_check.ipynb`; still to be uploaded and run on Kaggle.)*
+- [x] Load **VtG** from Hugging Face ([`eth-nlped/stepverify`](https://huggingface.co/datasets/eth-nlped/stepverify), 1,002 rows, CC BY 4.0: first error index, error category, teacher description).
+- [x] Inspect **30 VtG rows by hand** and note observations.
+- [x] Split VtG: **VtG dev = random 200 rows** (prompt format only, never used for training), **VtG test = remaining 802 rows**. Fix and record the seed.
+- [x] Compute the **random baseline** on VtG.
+- [x] Compute the **position-only baseline** on VtG (guess the most common error step for a given solution length).
+- [x] Read items **A1–A5** of the reading list (~8 h).
+- [x] Write `PREREGISTRATION.md` containing:
+  - [x] RQ1–RQ4 and all hypotheses (H1, H1b, H2, H2b, H3 + anti-hypothesis, H4, H4b — see below)
+  - [x] The **held-out misconception choice**: one misconception from each family —
     - one **distribution** error (e.g. distributing to the first term only)
     - one **sign** error
     - one **division** error (e.g. dividing one side only)
     - one **term-combining** error
-  - [ ] The planned splits, metrics, statistics and output format
-- [ ] Commit `PREREGISTRATION.md`.
-- [ ] Note to resolve while writing the pre-registration: the proposal lists 15 "seen" misconceptions and 4 held-out (one per family) — confirm the exact total from Sonkar et al. (2024) Table 1 and record the final list.
+  - [x] The planned splits, metrics, statistics and output format
+- [x] Commit `PREREGISTRATION.md`.
+- [x] Note to resolve while writing the pre-registration: the proposal lists 15 "seen" misconceptions and 4 held-out (one per family) — confirm the exact total from Sonkar et al. (2024) Table 1 and record the final list.
 
 ### Hypotheses to pre-register
 - **RQ1 – Measurement.** How often do current LLMs locate the first wrong step, name the misconception, and write feedback about the same step they flagged?
@@ -88,19 +88,19 @@ Complete, step-by-step plan derived from the project proposal. Every phase lists
   - **H4b:** No prediction about faithfulness; the direction of the change is the finding.
 
 ### Reading (Phase 0)
-- [ ] **A1** — *Stepwise Verification and Remediation of Student Reasoning Errors with LLM Tutors* (Daheim et al., EMNLP 2024) — [link](https://aclanthology.org/2024.emnlp-main.478). Read all of it. Closest prior work and the source of VtG; the project must say clearly what it adds.
-- [ ] **A2** — *LLMs cannot spot math errors, even when allowed to peek into the solution* (Srivatsa, Maurya & Kochmar, 2025) — [link](https://arxiv.org/abs/2509.01395). Sections 1–4 and the prompt appendix. VtG baselines to compare against; reusable prompt templates.
-- [ ] **A3** — *LLMs cannot find reasoning errors, but can correct them given the error location* (Tyen et al., Findings of ACL 2024). Abstract, Sections 1 and 4. The finding the tool-augmented condition builds on.
-- [ ] **A4** — *LLM-based Cognitive Models of Students with Misconceptions* (Sonkar et al., 2024, MalAlgoPy) — [link](https://arxiv.org/abs/2410.12294). Section 3 and Table 1 closely — the blueprint for the generator.
-- [ ] **A5** — *Misconception Acquisition Dynamics in Large Language Models* (Liu et al., 2026, MalAlgoLib) — [link](https://arxiv.org/abs/2604.00818). Abstract and results: intermediate steps are what let a model learn where an error enters.
-- [ ] **B1** — *The Unreliability of Explanations in Few-shot Prompting for Textual Reasoning* (Ye & Durrett, NeurIPS 2022). Origin of the faithfulness measure.
-- [ ] **B2** — *SatLM: Satisfiability-Aided Language Models Using Declarative Prompting* (Ye, Chen, Dillig & Durrett, NeurIPS 2023). The LLM-plus-solver pattern the grounded condition follows.
-- [ ] **B3** — *To CoT or not to CoT?* (Sprague et al., ICLR 2025). Reread the section comparing CoT with symbolic solvers.
+- [x] **A1** — *Stepwise Verification and Remediation of Student Reasoning Errors with LLM Tutors* (Daheim et al., EMNLP 2024) — [link](https://aclanthology.org/2024.emnlp-main.478). Read all of it. Closest prior work and the source of VtG; the project must say clearly what it adds.
+- [x] **A2** — *LLMs cannot spot math errors, even when allowed to peek into the solution* (Srivatsa, Maurya & Kochmar, 2025) — [link](https://arxiv.org/abs/2509.01395). Sections 1–4 and the prompt appendix. VtG baselines to compare against; reusable prompt templates.
+- [x] **A3** — *LLMs cannot find reasoning errors, but can correct them given the error location* (Tyen et al., Findings of ACL 2024). Abstract, Sections 1 and 4. The finding the tool-augmented condition builds on.
+- [x] **A4** — *LLM-based Cognitive Models of Students with Misconceptions* (Sonkar et al., 2024, MalAlgoPy) — [link](https://arxiv.org/abs/2410.12294). Section 3 and Table 1 closely — the blueprint for the generator.
+- [x] **A5** — *Misconception Acquisition Dynamics in Large Language Models* (Liu et al., 2026, MalAlgoLib) — [link](https://arxiv.org/abs/2604.00818). Abstract and results: intermediate steps are what let a model learn where an error enters.
+- [x] **B1** — *The Unreliability of Explanations in Few-shot Prompting for Textual Reasoning* (Ye & Durrett, NeurIPS 2022). Origin of the faithfulness measure.
+- [x] **B2** — *SatLM: Satisfiability-Aided Language Models Using Declarative Prompting* (Ye, Chen, Dillig & Durrett, NeurIPS 2023). The LLM-plus-solver pattern the grounded condition follows.
+- [x] **B3** — *To CoT or not to CoT?* (Sprague et al., ICLR 2025). Reread the section comparing CoT with symbolic solvers.
 
 ### Gate 0
-- [ ] **Both VtG baselines (random and position-only) computed** and
-- [ ] **`PREREGISTRATION.md` committed.**
-- [ ] Fill in Phase 0 in [PROGRESS.md](PROGRESS.md).
+- [x] **Both VtG baselines (random and position-only) computed** and
+- [x] **`PREREGISTRATION.md` committed.**
+- [x] Fill in Phase 0 in [PROGRESS.md](PROGRESS.md).
 
 ---
 
