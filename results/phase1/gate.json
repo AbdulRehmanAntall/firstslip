@@ -1,0 +1,70 @@
+{
+  "gate_2000": {
+    "n": 2000,
+    "incorrect": 1500,
+    "clean": 500,
+    "incorrect_located": 1.0,
+    "clean_no_error": 1.0,
+    "recovered": 0,
+    "unreadable_or_incomparable_steps": 0,
+    "mismatches": []
+  },
+  "all_items": {
+    "n": 10500,
+    "incorrect": 7875,
+    "clean": 2625,
+    "incorrect_located": 1.0,
+    "clean_no_error": 1.0,
+    "recovered": 0,
+    "unreadable_or_incomparable_steps": 0,
+    "mismatches": []
+  },
+  "by_split": {
+    "train": {
+      "n": 8000,
+      "incorrect": 6000,
+      "clean": 2000,
+      "incorrect_located": 1.0,
+      "clean_no_error": 1.0,
+      "recovered": 0,
+      "unreadable_or_incomparable_steps": 0,
+      "mismatches": []
+    },
+    "dev": {
+      "n": 500,
+      "incorrect": 375,
+      "clean": 125,
+      "incorrect_located": 1.0,
+      "clean_no_error": 1.0,
+      "recovered": 0,
+      "unreadable_or_incomparable_steps": 0,
+      "mismatches": []
+    },
+    "test_seen": {
+      "n": 1000,
+      "incorrect": 750,
+      "clean": 250,
+      "incorrect_located": 1.0,
+      "clean_no_error": 1.0,
+      "recovered": 0,
+      "unreadable_or_incomparable_steps": 0,
+      "mismatches": []
+    },
+    "test_heldout": {
+      "n": 1000,
+      "incorrect": 750,
+      "clean": 250,
+      "incorrect_located": 1.0,
+      "clean_no_error": 1.0,
+      "recovered": 0,
+      "unreadable_or_incomparable_steps": 0,
+      "mismatches": []
+    }
+  },
+  "status_counts": {
+    "same": 37394,
+    "changed": 7875
+  },
+  "gate_passed": true,
+  "run_log": "20261015T133304Z_phase1_gate.jsonl"
+}

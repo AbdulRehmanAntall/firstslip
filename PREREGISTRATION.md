@@ -153,4 +153,19 @@ Each correct reduction is one step and ends at T1 (for example T9 → T7 → T2 
 
 ## Amendments
 
-_None yet._
+### Amendment 1 — 2026-10-15 (Phase 1, after generating data, before any model run)
+
+**Reason:** These are implementation details of the generator that §2–§4 left open, plus one rule (balanced positions) that cannot be met in full on the held-out split. No model has been run.
+
+1. **Equation types (§3).** Two intermediate states are added to the 15 forms. T12d (`Ax = B + Cx + D`, T12 after distributing) and T12m (`Ax + B = C(Dx + E)`, T12 after moving B) give T12 two correct routes, of 5 and 6 steps.
+2. **Where misconceptions apply (§2).** The held-out set and the families are unchanged. Changes from Table 1's type lists:
+   - M13 is applied only to T7.
+   - M12_S15 and M13 reach T9/T12 only after distribution.
+   - M14/M15/M17/M18 also apply to the "+"/"−" pairs in T11 and T15.
+   - Distribution rules (M1, M2_S3, M5, M6, M8) also apply to T12m.
+   - M12_S15 keeps x, giving (A ± B)x, and M13 drops it, giving (A ± B). This resolves the open question about their identical descriptions.
+3. **Balanced positions (§4, rule 3).** Positions are balanced uniformly within each solution length over the cells a split's misconceptions can reach. The seen splits reach every cell except (6, 3); position-only scores 25.3% on test-seen against 24.9% for random. The four held-out misconceptions reach only 8 cells, so position-only, fitted on synthetic dev, scores **37.5%** on test-held-out. The anti-hypothesis test (§1, RQ3) on held-out data therefore compares against this 37.5% baseline. The rule "a trained model must beat the position-only baseline on held-out data" is unchanged.
+4. **Ranges (§4, rule 5).** "Simple fractions" means a denominator of at most 12, applied to the correct answer only. Multiplicative factors have |factor| ≥ 2. Zero coefficients are excluded.
+5. **Deduplication (§4, rule 4).** The canonical form is the unevaluated SymPy tree of each side (`srepr`, `evaluate=False`).
+
+Details and counts: `data/synthetic/README.md` and `PROGRESS.md` (Phase 1).

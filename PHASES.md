@@ -109,25 +109,25 @@ Complete, step-by-step plan derived from the project proposal. Every phase lists
 MalAlgoPy's code is not public (every candidate GitHub repo returns 404), so the generator is written **from scratch** from the misconception table in Sonkar et al. (2024). Expect ~2 days for this.
 
 ### Tasks — generator
-- [ ] Implement the **16 equation types** (from MalAlgoPy) as **reduction rules**, each producing one step.
-- [ ] Implement the **misconceptions from Sonkar et al. (2024), Table 1** as **alternative (wrong) steps**.
-- [ ] Add the generator rules:
-  - [ ] **One error per item:** each incorrect solution contains exactly one injected misconception, and the checker must confirm the solution set changes at that step.
-  - [ ] **No accidental recovery:** no later step may return to the correct answer by chance; such items are **dropped and counted**.
-  - [ ] **Balanced positions:** the first-error position is balanced across step indices so a position-only guess cannot score well.
-  - [ ] **Deduplication:** equations are deduplicated by their **canonical SymPy form across all splits**.
-  - [ ] **Ranges:** coefficients are integers in **[-12, 12]**; answers are integers or simple fractions; solutions run **3 to 6 steps**.
-- [ ] Respect the held-out choice from `PREREGISTRATION.md` — held-out misconceptions must never appear in train/dev/test-seen.
+- [x] Implement the **16 equation types** (from MalAlgoPy) as **reduction rules**, each producing one step. *(15 forms — T13 is absent from Sonkar et al. — plus intermediate states T12d and T12m; see PREREGISTRATION.md Amendment 1.)*
+- [x] Implement the **misconceptions from Sonkar et al. (2024), Table 1** as **alternative (wrong) steps**.
+- [x] Add the generator rules:
+  - [x] **One error per item:** each incorrect solution contains exactly one injected misconception, and the checker must confirm the solution set changes at that step.
+  - [x] **No accidental recovery:** no later step may return to the correct answer by chance; such items are **dropped and counted**.
+  - [x] **Balanced positions:** the first-error position is balanced across step indices so a position-only guess cannot score well.
+  - [x] **Deduplication:** equations are deduplicated by their **canonical SymPy form across all splits**.
+  - [x] **Ranges:** coefficients are integers in **[-12, 12]**; answers are integers or simple fractions; solutions run **3 to 6 steps**.
+- [x] Respect the held-out choice from `PREREGISTRATION.md` — held-out misconceptions must never appear in train/dev/test-seen.
 
 ### Tasks — checker
-- [ ] Parse each line of a solution:
+- [x] Parse each line of a solution:
   - plain text → `sympy.parsing.sympy_parser.parse_expr`
   - LaTeX (app input) → `parse_latex(..., backend="lark")` (lark avoids the ANTLR version pin)
-- [ ] Compare **solution sets between consecutive steps** using `solveset` for equations; for expressions use `simplify(a - b) == 0` **plus random numeric spot checks**.
-- [ ] Return the **first step where the solution set differs** (or 0 if none).
+- [x] Compare **solution sets between consecutive steps** using `solveset` for equations; for expressions use `simplify(a - b) == 0` **plus random numeric spot checks**.
+- [x] Return the **first step where the solution set differs** (or 0 if none).
 
 ### Tasks — data
-- [ ] Generate all synthetic splits:
+- [x] Generate all synthetic splits:
 
 | Split | Source | Planned size | Use |
 |---|---|---|---|
@@ -139,15 +139,15 @@ MalAlgoPy's code is not public (every candidate GitHub repo returns 404), so the
 | VtG test | VtG, remaining rows | 802 | Transfer test |
 
   (Sizes are targets, not measurements.)
-- [ ] Write a **dataset card** (sources, rules, splits, held-out choice, counts of dropped items, licence).
+- [x] Write a **dataset card** (sources, rules, splits, held-out choice, counts of dropped items, licence).
 
 ### Fallback
 - If rebuilding the rules is too fiddly: start with the **8 most common misconceptions** and add the rest later; the held-out design still works.
 
 ### Gate 1
-- [ ] On **2,000 generated items**, the checker finds the injected step in **100% of incorrect items** and reports **no error on 100% of clean items**.
-- [ ] **50 items checked by hand.**
-- [ ] Fill in Phase 1 in [PROGRESS.md](PROGRESS.md).
+- [x] On **2,000 generated items**, the checker finds the injected step in **100% of incorrect items** and reports **no error on 100% of clean items**.
+- [x] **50 items checked by hand.**
+- [x] Fill in Phase 1 in [PROGRESS.md](PROGRESS.md).
 
 ---
 
@@ -305,8 +305,8 @@ Short version (stopped at cut line): replace the last sentence with *"Deployed a
 
 | # | Deliverable | Phase | Done |
 |---|---|---|---|
-| 1 | Open-source generator and SymPy checker | 1 | [ ] |
-| 2 | Synthetic benchmark (seen + held-out) with dataset card | 1 | [ ] |
+| 1 | Open-source generator and SymPy checker | 1 | [x] |
+| 2 | Synthetic benchmark (seen + held-out) with dataset card | 1 | [x] |
 | 3 | Prompted results for four models (localization, faithfulness, deference) | 2 | [ ] |
 | 4 | Live student app separating verified feedback from guesses | 3 | [ ] |
 | 5 | Trained checkpoints (SFT, GRPO; 3 seeds) with held-out and VtG results | 4–5 | [ ] |

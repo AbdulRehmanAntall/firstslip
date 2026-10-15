@@ -2,7 +2,7 @@
 
 **Finding the first wrong step in student algebra with a symbolic checker.**
 
-> Status: project idea / pre-registration stage. Code, data and results will be added phase by phase (see [PHASES.md](PHASES.md) and [PROGRESS.md](PROGRESS.md)).
+> Status: Phase 1 complete (generator, checker and synthetic benchmark). Later phases are added as they finish; see [PHASES.md](PHASES.md) and [PROGRESS.md](PROGRESS.md).
 
 ## The idea
 
@@ -29,12 +29,31 @@ The trained model is then tested on the teacher-annotated VtG solutions, where n
 
 | Component | Planned tool |
 |---|---|
-| Solution and error generator | Own Python module (16 equation types, misconception table from Sonkar et al., 2024) |
-| Step checker | SymPy |
+| Solution and error generator | `core/generator.py` (15 equation forms and 19 misconceptions from Sonkar et al., 2024) |
+| Step checker | `core/checker.py` (SymPy) |
 | Teacher-annotated test set | [VtG on Hugging Face](https://huggingface.co/datasets/eth-nlped/stepverify) |
 | Open models | Qwen3.5-2B / 4B (fallback: Qwen3-1.7B) |
 | Training | TRL `GRPOTrainer` / `SFTTrainer`, Unsloth + LoRA, Kaggle T4 GPUs |
 | Student app | FastAPI + MathLive, hosted on Hugging Face Spaces |
+
+## Reproducing Phase 1
+
+```bash
+python -m venv .venv && .venv/Scripts/pip install -r requirements.txt   # Python 3.12
+python scripts/generate_synthetic.py   # data/synthetic/*.jsonl; hashes in data/synthetic/manifest.json
+python scripts/phase1_gate.py          # checker vs. generator labels (Gate 1), ~9 min
+python scripts/synthetic_baselines.py  # random and position-only baselines
+python -m pytest
+```
+
+Checking a solution:
+
+```python
+from core.checker import check
+check("2x = 3(x + 4)", ["2x = 3x + 4", "-x = 4", "x = -4"]).first_error  # -> 1
+```
+
+The benchmark is described in its [dataset card](data/synthetic/README.md).
 
 ## Planned deliverables
 

@@ -77,15 +77,71 @@ _Planned: 16 – 18 Oct 2026, ~6 h · Gate: both VtG baselines computed and `PRE
 ## Phase 1 — Generator and checker
 _Planned: 19 – 27 Oct 2026, ~16 h · Gate: checker 100% on 2,000 generated items (incorrect and clean); 50 hand-checked_
 
-- **Status:** not started
-- **Dates / hours:**
-- **Gate:**
-- **What was done:**
-- **Key results / numbers:** (split sizes, items dropped for accidental recovery, checker accuracy)
-- **Artifacts:**
-- **Deviations from plan:**
-- **Issues / open questions:**
-- **Carry-over:**
+- **Status:** ✅ complete (the Phase 0 Kaggle notebook run is still open)
+- **Dates / hours:** 15 Oct 2026, ahead of plan.
+- **Gate:** **passed.** On 2,000 generated items (1,500 incorrect, 500 clean), the checker finds the injected step on **100%** of incorrect items and reports no error on **100%** of clean items. The same holds on all 10,500 items (`results/phase1/gate.json`). 50 items were hand-checked, and all 50 agree (`notes/phase1_hand_check.md`).
+
+**What was done**
+- `core/checker.py`: the SymPy step checker.
+  - Input: plain text through `parse_expr`, restricted to arithmetic on x because `parse_expr` evaluates its input, or LaTeX through `parse_latex(..., backend="lark")`.
+  - Comparison: equations by `solveset` solution sets; expressions by `simplify(a - b) == 0` plus 5 numeric spot checks.
+  - Output: the first changed step. Unreadable lines are flagged and skipped, never guessed.
+- `core/generator.py`, rebuilt from Sonkar et al. (2024):
+  - The 15 equation forms are one-step reductions. Correct edges are rebuilt from Figure 1; two intermediate states, T12d and T12m, are added.
+  - The 19 misconceptions of Table 1 are alternative steps.
+  - Labels come from exact `Fraction` arithmetic, so the gate tests the checker against an independent ground truth.
+- `scripts/generate_synthetic.py`: train 8,000 / dev 500 / test-seen 1,000 / test-held-out 1,000.
+  - One error per item, no accidental recovery, (length, position)-balanced cells, global deduplication by unevaluated SymPy form.
+  - Coefficients in [−12, 12]; answers are integers or fractions with denominator ≤ 12; 3–6 steps.
+  - Reproducible byte for byte from seed `20261019`.
+- Dataset card: `data/synthetic/README.md`. File hashes and all counts: `data/synthetic/manifest.json`.
+- `scripts/synthetic_baselines.py`: random and position-only baselines on the synthetic tests.
+- `tests/` (pytest, 30 tests). `lark` and `pytest` added to `requirements.txt`.
+
+**Key results / numbers**
+
+| Split | Items | Incorrect | Clean | Misconceptions (incorrect items each) |
+|---|---|---|---|---|
+| train | 8,000 | 6,000 | 2,000 | 15 seen (341–510) |
+| dev | 500 | 375 | 125 | 15 seen (20–32) |
+| test_seen | 1,000 | 750 | 250 | 15 seen (42–64) |
+| test_heldout | 1,000 | 750 | 250 | M2_S3 125, M6 125, M11 125, M20_S20 375 |
+
+- **Accidental recovery:** 0 items dropped. With one wrong step followed by correct reductions, recovery cannot happen, but the check is kept. All other rejected candidates are counted per split in the dataset card.
+- **Checker accuracy:** 100% / 100% on the gate sample and on all items. No unreadable or incomparable lines.
+
+| Baseline (first-error acc.) | test_seen | test_heldout |
+|---|---|---|
+| Random (expected) | 24.9% | 21.7% |
+| Position-only, fit on synthetic dev | **25.3%** (22.3–28.4) | **37.5%** (34.0–40.9) |
+| Best possible position-only rule | 25.6% | 50.1% |
+
+**Artifacts**
+- Commit `2c10d15` (code).
+- Run logs, all at `2c10d15`: `runs/20261015T133230Z_phase1_generate.jsonl`, `runs/20261015T133304Z_phase1_gate.jsonl` (one record per gate item), `runs/20261015T133745Z_phase1_synthetic_baselines.jsonl`.
+- `results/phase1/gate.json`, `results/phase1/synthetic_baselines.json`, `data/synthetic/manifest.json`, `data/synthetic/README.md`, `notes/phase1_hand_check.md`.
+- The `.jsonl` data files are git-ignored like VtG. They are regenerated with `python scripts/generate_synthetic.py`, and their hashes are in the manifest.
+
+**Deviations from plan** (recorded as Amendment 1 in `PREREGISTRATION.md`)
+- **Two intermediate states.** T12d (T12 after distributing) and T12m (T12 after moving B) were added. T12m gives 6-step solutions and lets distribution and M11 errors occur at steps 2–3.
+- **Applicability narrowed or widened.**
+  - M13 is applied only to T7; on T5/T6 it would leave no x.
+  - M12_S15 and M13 reach T9/T12 only through the distributed T7 state.
+  - The pair rules M14/M15/M17/M18 also apply to pairs inside T11 and T15.
+  - M12_S15 and M13 are now distinct: M12_S15 gives (A ± B)x, while M13 drops the x.
+- **Balanced positions cannot be fully met on the held-out test.** The four held-out misconceptions can only reach 8 (length, position) cells. Position-only fitted on dev scores 37.5% there. The H3 and anti-hypothesis comparisons on held-out must use that number, not random.
+- **Misconceptions are balanced within reachable cells, not exactly.** Position balance was given priority.
+- The proposal's 6,000/2,000 train sizes and 25% clean test sizes are met exactly.
+
+**Issues / open questions**
+- T12 is 34% of train and 63% of test-held-out, because only T12 gives 5–6-step solutions. Report results by start type or by length in Phase 2 to check this does not drive the numbers.
+- Checker speed: the full 10,500-item check takes about 8.5 min because `solveset` dominates. This is fine offline. For the app, the per-line cache in `parse_line` is enough.
+- The hand check was done by the coding agent. The author should re-check a few items.
+
+**Carry-over to Phase 2**
+- [ ] Upload and run `notebooks/phase0_kaggle_env_check.ipynb` on Kaggle (still open from Phase 0).
+- [ ] Report the E1 held-out results against the 37.5% position-only baseline as well as random.
+- [ ] Use `core.checker.check` for the E2 grounded condition and `first_error` from the data for E3's corrupted locations.
 
 ---
 
