@@ -11,9 +11,9 @@ from collections import Counter
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
-from firstslip import vtg  # noqa: E402
-from firstslip.runlog import RunLog  # noqa: E402
-from firstslip.stats import bootstrap_ci  # noqa: E402
+from core import vtg  # noqa: E402
+from core.runlog import RunLog  # noqa: E402
+from core.stats import bootstrap_ci  # noqa: E402
 
 SEED = 0
 OUT = Path(__file__).resolve().parent.parent / "results" / "phase0" / "vtg_baselines.json"

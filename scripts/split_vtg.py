@@ -4,7 +4,7 @@ import sys
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
-from firstslip import vtg  # noqa: E402
+from core import vtg  # noqa: E402
 
 SEED = 20261016
 DEV_SIZE = 200

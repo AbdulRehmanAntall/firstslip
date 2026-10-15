@@ -6,7 +6,7 @@ from collections import Counter, defaultdict
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
-from firstslip import vtg  # noqa: E402
+from core import vtg  # noqa: E402
 
 OUT = Path(__file__).resolve().parent.parent / "results" / "phase0" / "vtg_label_agreement.json"
 

@@ -23,7 +23,7 @@ _Planned: 16 – 18 Oct 2026, ~6 h · Gate: both VtG baselines computed and `PRE
 
 **What was done**
 - Repo set up with `.venv`, pinned `requirements.txt` (Python 3.12.4; `datasets` 5.1.0, `sympy` 1.14.0, `numpy` 2.5.4, `pandas` 3.0.6, `scipy` 1.18.1) and `.gitignore`.
-- `firstslip/` package:
+- `core/` package (shared code; renamed from `firstslip/`):
   - `runlog.py`: one JSONL per run, headed by git commit, seed and config hash.
   - `vtg.py`: loading, 1-based step convention, grouped split.
   - `stats.py`: bootstrap CI.
