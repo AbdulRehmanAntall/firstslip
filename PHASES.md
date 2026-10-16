@@ -28,7 +28,7 @@ Complete, step-by-step plan derived from the project proposal. Every phase lists
 
 ### Fixed model output format
 - [ ] Every model answers in one fixed format: **the first wrong step number (or `0` for no error), then one sentence of feedback.**
-- [ ] The same format is used for prompted models (E1–E3), training (E4) and evaluation (E5–E6). It keeps parsing exact and GRPO completions short enough for a T4.
+- [ ] The same format is used for prompted models (E1–E3), training (E4) and evaluation (E5–E6). It keeps parsing exact and GRPO completions short.
 
 ### Metrics
 - [ ] **First-error accuracy:** exact match with the true first wrong step, on incorrect solutions.
@@ -55,7 +55,7 @@ Complete, step-by-step plan derived from the project proposal. Every phase lists
 ### Tasks
 - [x] Create the GitHub repository.
 - [x] Create a Python environment with **pinned versions** (e.g. `requirements.txt` / lock file).
-- [ ] Create a Kaggle notebook with **GPU enabled** (2 × T4); confirm Colab free tier works as backup. *(Notebook written: `notebooks/phase0_kaggle_env_check.ipynb`; still to be uploaded and run on Kaggle.)*
+- [x] ~~Create a Kaggle notebook with GPU enabled (2 × T4)~~. *Dropped: all GPU work runs on Colab Pro (A100), which Phase 2 already used. `notebooks/phase0_kaggle_env_check.ipynb` is kept but not run.*
 - [x] Load **VtG** from Hugging Face ([`eth-nlped/stepverify`](https://huggingface.co/datasets/eth-nlped/stepverify), 1,002 rows, CC BY 4.0: first error index, error category, teacher description).
 - [x] Inspect **30 VtG rows by hand** and note observations.
 - [x] Split VtG: **VtG dev = random 200 rows** (prompt format only, never used for training), **VtG test = remaining 802 rows**. Fix and record the seed.
@@ -153,25 +153,24 @@ MalAlgoPy's code is not public (every candidate GitHub repo returns 404), so the
 
 ## Phase 2 — Prompted experiments E1–E3 (28 Oct – 3 Nov, ~15 h)
 
-### Models (four)
-- ~~One **frontier API model**~~ and one **low-cost API model**: `gpt-6-luna` (version pinned and logged; pay per call; $5 spending cap; every response cached).
+### Models (three)
 - **Qwen3.5-2B**, **Qwen3.5-4B** and **Qwen3.5-27B (FP8)**, served with **vLLM** (Apache 2.0) on a Colab Pro A100. Fallbacks: Qwen3-1.7B / Qwen3-4B / Qwen3.5-27B-GPTQ-Int4.
-- *The frontier API model was replaced by Qwen3.5-27B for cost reasons; see Amendment 3 in `PREREGISTRATION.md`.*
+- *Both API models were dropped. The frontier model was replaced by Qwen3.5-27B for cost reasons (Amendment 3), and `gpt-6-luna` was removed (Amendment 4 in `PREREGISTRATION.md`).*
 
 ### Experiments
 
 | Exp. | RQ | Conditions | Data |
 |---|---|---|---|
-| E1 Prompted localization | RQ1 | Random; position-only; 2 API models; 2 open models | Test seen, test held-out, VtG test |
+| E1 Prompted localization | RQ1 | Random; position-only; 3 open models | Test seen, test held-out, VtG test |
 | E2 Grounded feedback | RQ2 | No location given vs. checker location given; LLM writes the feedback | Synthetic tests |
 | E3 Corrupted tool | RQ2 | Location given is the true step, one step off, or a random wrong step | Synthetic tests |
 
 ### Tasks
 - [x] Write **one prompt template** and the **output parser** (fixed format: step number or 0, then one sentence). *(`core/prompts.py`; API runner `scripts/phase2_run.py`, Colab vLLM notebook `notebooks/phase2_colab_vllm.ipynb`.)*
 - [ ] **Freeze both** using the dev splits only (synthetic dev + VtG dev).
-- [ ] Run **E1** on all four models across **both synthetic tests and VtG test**, caching every response. Report VtG results on all 802 rows **and separately without the "None of the above" category** (8.7% of VtG, least consistent labels).
-- [ ] Run **E2** on the synthetic tests.
-- [ ] Run **E3** on the synthetic tests (true / one-off / random-wrong location); compute deference rate.
+- [x] Run **E1** on all three models across **both synthetic tests and VtG test**, caching every response. Report VtG results on all 802 rows **and separately without the "None of the above" category** (8.7% of VtG, least consistent labels).
+- [x] Run **E2** on the synthetic tests.
+- [x] Run **E3** on the synthetic tests (true / one-off / random-wrong location); compute deference rate.
 - [x] Build the **faithfulness extractor** (rule-based: finds the step the feedback sentence mentions). *(`core/faithfulness.py`; misconception mapping in `core/misconceptions.py`.)*
 - [ ] **Audit 100 items by hand** for faithfulness; report extractor–hand agreement.
 - [ ] Audit misconception-name mapping on **100 items by hand**.
@@ -222,7 +221,7 @@ MalAlgoPy's code is not public (every candidate GitHub repo returns 404), so the
 - Base model: **Qwen3.5-2B** (fallback Qwen3-1.7B).
 - **TRL `GRPOTrainer`** with a custom reward function; **TRL `SFTTrainer`** for the baseline.
 - **Unsloth + LoRA** to fit a 2B model and GRPO sampling in 16 GB.
-- Compute: **Kaggle** (2 × T4, ~30 GPU-hours/week, quota floats); **Colab free** as overflow. Keep **each GRPO run under 3 hours**.
+- Compute: **Colab Pro** GPU (A100, as in Phase 2). Keep **each GRPO run under 3 hours**.
 
 ### GRPO reward (checker-scored)
 | Completion | Reward |
@@ -247,8 +246,8 @@ Nothing in the reward looks at the feedback sentence — this is what makes E6 a
 
 ### Fallbacks
 - GRPO has no signal (every sample in a group gets the same reward → zero update): start with easier items (two-step equations), raise samples per prompt, or switch to rejection-sampling fine-tuning.
-- Model doesn't run well on T4: use Qwen3-1.7B.
-- Kaggle quota runs out: keep runs < 3 h; overflow to Colab.
+- Qwen3.5-2B doesn't train well with Unsloth/TRL: use Qwen3-1.7B.
+- Colab compute units run low: keep runs < 3 h.
 
 ### Gate 4
 - [ ] **Three seeds per condition evaluated**, with **held-out results** and the **position check** reported.
@@ -308,7 +307,7 @@ Short version (stopped at cut line): replace the last sentence with *"Deployed a
 |---|---|---|---|
 | 1 | Open-source generator and SymPy checker | 1 | [x] |
 | 2 | Synthetic benchmark (seen + held-out) with dataset card | 1 | [x] |
-| 3 | Prompted results for four models (localization, faithfulness, deference) | 2 | [ ] |
+| 3 | Prompted results for three models (localization, faithfulness, deference) | 2 | [ ] |
 | 4 | Live student app separating verified feedback from guesses | 3 | [ ] |
 | 5 | Trained checkpoints (SFT, GRPO; 3 seeds) with held-out and VtG results | 4–5 | [ ] |
 | 6 | 4–6 page technical report | 6 | [ ] |
@@ -319,13 +318,13 @@ Short version (stopped at cut line): replace the last sentence with *"Deployed a
 | Risk | What could happen | Fallback |
 |---|---|---|
 | GRPO has no signal | All samples in a group get the same reward; update is zero | Easier items (two-step), more samples per prompt, or rejection-sampling FT (go/no-go 12 Nov caps cost at 2 days) |
-| Model doesn't run on T4 | Qwen3.5's newer layers slow/unsupported | Qwen3-1.7B |
+| Model doesn't train well | Qwen3.5's newer layers slow/unsupported in Unsloth/TRL | Qwen3-1.7B |
 | Generator takes longer | Misconception rules are fiddly | Start with 8 most common misconceptions |
 | Position shortcut | Trained model guesses a common step number | Balanced positions, position-only baseline, predicted-position plot |
 | Noisy VtG labels | Inconsistent teacher annotations | Report with and without "None of the above" |
 | Parsing failures in app | Students type unparseable steps | MathLive, one equation per line, "could not read this line" |
 | API cost | Many models × thousands of items | Cache, spending cap, full grid only on final prompt |
-| Kaggle quota | GPU hours run out in Phase 4 | GRPO runs < 3 h; Colab overflow |
+| Colab compute | Compute units run low in Phase 4 | GRPO runs < 3 h |
 | Overclaiming | Synthetic result presented as learning outcome | State no learner study; VtG is simulated |
 
 ## Sources

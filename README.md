@@ -33,7 +33,7 @@ The trained model is then tested on the teacher-annotated VtG solutions, where n
 | Step checker | `core/checker.py` (SymPy) |
 | Teacher-annotated test set | [VtG on Hugging Face](https://huggingface.co/datasets/eth-nlped/stepverify) |
 | Open models | Qwen3.5-2B / 4B (fallback: Qwen3-1.7B) |
-| Training | TRL `GRPOTrainer` / `SFTTrainer`, Unsloth + LoRA, Kaggle T4 GPUs |
+| Training | TRL `GRPOTrainer` / `SFTTrainer`, Unsloth + LoRA, Colab Pro GPU |
 | Student app | FastAPI + MathLive, hosted on Hugging Face Spaces |
 
 ## Reproducing Phase 1
@@ -59,7 +59,7 @@ The benchmark is described in its [dataset card](data/synthetic/README.md).
 
 1. An open-source generator and SymPy checker for algebra solutions with known first errors
 2. A benchmark of synthetic test sets (seen and held-out misconceptions) with a dataset card
-3. Prompted results for four models on localization, faithfulness and deference to a wrong verifier
+3. Prompted results for three open models (Qwen3.5 2B, 4B, 27B) on localization, faithfulness and deference to a wrong verifier
 4. A live student app that separates verified feedback from the model's guesses
 5. Trained checkpoints (SFT and GRPO, three seeds each) with held-out and VtG results
 6. A four- to six-page technical report

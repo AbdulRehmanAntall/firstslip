@@ -213,3 +213,24 @@ Details and counts: `data/synthetic/README.md` and `PROGRESS.md` (Phase 1).
    - Every model answers every item, so no subsample is used.
 3. **Hypothesis thresholds unchanged.** "At least 3 of 4 models" in H1, H2 and H2b now refers to these four models.
 4. **Limitation to state.** No closed frontier model is evaluated. The strongest model is a 27B open model, so the results do not say how a frontier model would perform. The VtG comparison with GPT-4o uses the published number of Srivatsa et al. (2025), not a re-run.
+
+### Amendment 4 — 2026-10-16 (Phase 2, after the Qwen test runs were scored)
+
+**Reason:** `gpt-6-luna` is removed from the plan, so no paid API model is part of the study. This amendment comes after the three Qwen models' test results were seen, so it is stated what each hypothesis would have been under the old wording.
+
+1. **Models (replaces Amendment 3, item 1).** The three models are Qwen3.5-2B, Qwen3.5-4B and Qwen3.5-27B (FP8), with the settings and fallbacks of Amendment 3. No API model is run.
+2. **Budget (replaces Amendment 3, item 2).** No API spend. The $5 cap and the API runner (`scripts/phase2_run.py`, `core/llm.py`) stay in the repository unused.
+3. **Hypothesis thresholds.** "At least 3 of 4 models" in H1, H2 and H2b becomes "at least 2 of 3 models". No outcome depends on this change. H1 holds for 0 of 3 models, H2b for 1 of 3 and H2 for at most 1 of 3. Each would fail under 2 of 3, under 3 of 3, and under 3 of 4 whatever a fourth model showed. H1b ("at least one model") is unchanged.
+4. **Limitation to state (extends Amendment 3, item 4).** No closed model of any size is evaluated. All results are for one open model family.
+
+### Amendment 5 — 2026-10-16 (Phase 2, after the hand audits, before any judge run)
+
+**Reason:** Both rule-based feedback measures failed their hand audits (`results/phase2/audit.json`). The faithfulness extractor agrees with hand labels on 21% of 100 items (Gate 2 needs ≥ 90%), and mostly finds no step in feedback that, by hand, is about the flagged step (69 of 87). The misconception mapping recognises 21 of the 48 feedback sentences that, by hand, diagnose the error correctly. The models describe the operation ("forgot to divide both sides by −7") rather than quoting a step, which fixed rules cannot read.
+
+1. **Hand labels (amends Amendment 2, item 5).** Both audits were labelled in binary form on 100 test items each. Faithfulness: 1 = the feedback is about the flagged step. Misconception: 1 = the feedback correctly diagnoses the error. Agreement is exact match with each tool's binary verdict.
+2. **LLM judge (`core/judge.py`, version `j-v1`).** Qwen3.5-27B, greedy, thinking off, at most 32 output tokens.
+   - *Faithfulness:* the judge sees the problem, the steps and the feedback, but not the flagged step, and names the step the feedback is about (or 0). Faithful = that step equals the flagged step.
+   - *Diagnosis:* the judge sees the solution, the true first wrong step and a plain description of the injected misconception, and answers yes or no: does the feedback identify that mistake? This replaces exact-label misconception accuracy as the outcome for H2 (E1 "no location" vs E2 "location given", McNemar, Holm). The H2 threshold is unchanged ("at least 2 of 3 models", Amendment 4).
+3. **Freezing and validation.** The judge prompt is checked on synthetic dev and VtG dev only (parse rate and a read-through of outputs) and frozen before any test item is judged. It is then validated once against the 100 + 100 test hand labels, which it never sees. The judge replaces the extractor for Gate 2 if its faithfulness agreement is ≥ 90%. Otherwise faithfulness is reported from the 100 hand labels only, and diagnosis results are reported with the judge's agreement as a caveat.
+4. **Reported alongside.** The pre-registered rule-based results (extractor, m-v1 mapping) stay in the tables as the pre-registered measures, with their audit results.
+5. **Known limitations.** The judge is also one of the judged models (self-preference is possible; per-model agreement is reported where the audit sample allows). Some test feedback was read while diagnosing the extractor and mapping failures, before this amendment. The judge prompt was written without seeing any judge output.

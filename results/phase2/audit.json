@@ -1,0 +1,64 @@
+{
+  "faithfulness": {
+    "labels": "binary",
+    "labelled": 100,
+    "agreement": 0.21,
+    "ci95": [
+      0.13,
+      0.29
+    ],
+    "hand_positive_rate": {
+      "mean": 0.87,
+      "ci95": [
+        0.8,
+        0.93
+      ]
+    },
+    "auto_positive_rate": {
+      "mean": 0.2,
+      "ci95": [
+        0.13,
+        0.28
+      ]
+    },
+    "confusion": {
+      "hand=0/auto=faithful": 6,
+      "hand=0/auto=unfaithful": 3,
+      "hand=0/auto=unspecified": 4,
+      "hand=1/auto=faithful": 14,
+      "hand=1/auto=unfaithful": 4,
+      "hand=1/auto=unspecified": 69
+    }
+  },
+  "misconception": {
+    "labels": "binary",
+    "labelled": 100,
+    "agreement": 0.69,
+    "ci95": [
+      0.6,
+      0.78
+    ],
+    "hand_positive_rate": {
+      "mean": 0.48,
+      "ci95": [
+        0.38,
+        0.58
+      ]
+    },
+    "auto_positive_rate": {
+      "mean": 0.25,
+      "ci95": [
+        0.17,
+        0.34
+      ]
+    },
+    "confusion": {
+      "hand=0/auto=match": 4,
+      "hand=0/auto=unmapped": 28,
+      "hand=0/auto=wrong": 20,
+      "hand=1/auto=match": 21,
+      "hand=1/auto=unmapped": 23,
+      "hand=1/auto=wrong": 4
+    }
+  }
+}

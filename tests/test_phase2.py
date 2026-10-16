@@ -151,3 +151,27 @@ def test_sample_nested_and_balanced():
     s100, s200 = sample(items, 100), sample(items, 200)
     assert len(s100) == 100 and {r["id"] for r in s100} <= {r["id"] for r in s200}
     assert sum(r["first_error"] == 0 for r in s100) == 25
+
+
+# --- feedback judge (Amendment 5) --------------------------------------------
+
+def test_judge_requests_hide_or_give_the_right_facts():
+    from core import judge
+    f = judge.faith_request(ITEM, "You dropped the x.", "e1", "none")
+    assert "Step 2: -3x = -10" in f.input and "first wrong step" not in f.input  # flagged / true step not shown
+    d = judge.diag_request(ITEM, "You dropped the x.", "e2", "true")
+    assert "The first wrong step is step 2." in d.input and judge.DESCRIPTIONS["M13"] in d.input
+    assert set(judge.DESCRIPTIONS) == set(__import__("core.generator", fromlist=["MISCONCEPTIONS"]).MISCONCEPTIONS)
+
+
+def test_parse_judge_and_faith_label():
+    from core.judge import faith_label, parse_judge
+    assert parse_judge("faith", "Step: 3") == 3
+    assert parse_judge("faith", "<think>x</think>**Step:** 0") == 0
+    assert parse_judge("faith", "step three") is None
+    assert parse_judge("diag", "Verdict: Yes") is True
+    assert parse_judge("diag", "**Verdict:** no.") is False
+    assert parse_judge("diag", "maybe") is None
+    assert faith_label(2, 2) == "faithful" and faith_label(2, 3) == "unfaithful"
+    assert faith_label(2, 0) == faith_label(2, None) == "unspecified"
+    assert faith_label(0, 2) is None

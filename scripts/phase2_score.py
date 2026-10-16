@@ -23,6 +23,7 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 from core.checker import Unreadable, solution_set  # noqa: E402
 from core.faithfulness import faithfulness_label  # noqa: E402
+from core.judge import faith_label  # noqa: E402
 from core.misconceptions import family, map_feedback  # noqa: E402
 from core.phase2 import load_items  # noqa: E402
 from core.stats import bootstrap_ci, holm, mcnemar, paired_bootstrap_diff  # noqa: E402
@@ -49,6 +50,24 @@ def load_runs() -> dict:
         for line in path.open(encoding="utf-8"):
             r = json.loads(line)
             if r.get("type") == "response":
+                recs[(r["id"], r["condition"])] = r
+        out[key] = {"path": path.name, "records": recs}
+    return out
+
+
+def load_judgements() -> dict:
+    """{(task, exp, split, model): {(id, condition): judgement}} from the newest judge log of each."""
+    newest: dict[tuple, Path] = {}
+    for path in sorted(RUNS.glob("*_phase2judge_*.jsonl")):
+        with path.open(encoding="utf-8") as f:
+            c = json.loads(f.readline())["config"]
+        newest[(c["task"], c["source_exp"], c["split"], c["judged_model"])] = path
+    out = {}
+    for key, path in newest.items():
+        recs = {}
+        for line in path.open(encoding="utf-8"):
+            r = json.loads(line)
+            if r.get("type") == "judgement":
                 recs[(r["id"], r["condition"])] = r
         out[key] = {"path": path.name, "records": recs}
     return out
@@ -210,6 +229,36 @@ def main():
                 row["true"] = {"first_error_acc": ci([exact_hit(wrong[i], r) for (i, c), r in g.items() if i in wrong])}
             res["e3"][split][m] = row
 
+    # Judge-based feedback metrics (Amendment 5): faithfulness on E1, diagnosis on E1 and E2.
+    judged = load_judgements()
+    res["judge"] = {"runs": {"/".join(k): v["path"] for k, v in judged.items()}, "faith": {}, "diag": {}, "h2_tests": []}
+    for split in syn + (vtg_split,):
+        for m in models:
+            j = judged.get(("faith", "e1", split, m))
+            if not j:
+                continue
+            recs = list(j["records"].values())
+            labs = [x for x in (faith_label(r["flagged"], r["verdict"]) for r in recs) if x]
+            res["judge"]["faith"].setdefault(split, {})[m] = {
+                "n": len(labs), "parse_rate": sum(r["verdict"] is not None for r in recs) / max(1, len(recs)),
+                "faithful": ci([int(x == "faithful") for x in labs]), "unfaithful": ci([int(x == "unfaithful") for x in labs]),
+                "unspecified_rate": sum(x == "unspecified" for x in labs) / max(1, len(labs))}
+    for split in syn:
+        for m in models:
+            none, given = judged.get(("diag", "e1", split, m)), judged.get(("diag", "e2", split, m))
+            row = {}
+            for name, j, cond in (("none", none, "none"), ("given", given, "true")):
+                if j:
+                    row[name] = ci([int(r["verdict"] is True) for (_, c), r in j["records"].items() if c == cond])
+            if none and given:
+                ids = sorted(i for (i, c) in given["records"] if c == "true" and (i, "none") in none["records"])
+                a = [int(given["records"][(i, "true")]["verdict"] is True) for i in ids]
+                b = [int(none["records"][(i, "none")]["verdict"] is True) for i in ids]
+                res["judge"]["h2_tests"].append({"split": split, "model": m, "metric": "diagnosis_acc (given - none)", **compare(a, b)})
+            if row:
+                res["judge"]["diag"].setdefault(split, {})[m] = row
+    apply_holm(res["judge"]["h2_tests"])
+
     OUT.mkdir(parents=True, exist_ok=True)
     stem = "tables_dev" if args.dev else "tables"
     (OUT / f"{stem}.json").write_text(json.dumps(res, indent=2), encoding="utf-8")
@@ -268,6 +317,22 @@ def to_markdown(res) -> str:
             for m, r in by_model.items():
                 L.append(f"| {split} | {m} | {pct(r.get('true', {}).get('first_error_acc'))} | {pct(r['off1']['deference'])} | {pct(r['rand']['deference'])} | "
                          f"{pct(r['off1']['first_error_acc'])} | {pct(r['rand']['first_error_acc'])} |")
+        L.append("")
+    jd = res.get("judge", {})
+    if jd.get("faith"):
+        L += ["## Judge — faithfulness (E1, Amendment 5)", "", "| Split | Model | n | Faithful | Unfaithful | Unspecified | Parse |", "|---|---|---|---|---|---|---|"]
+        for split, by_model in jd["faith"].items():
+            for m, r in by_model.items():
+                L.append(f"| {split} | {m} | {r['n']} | {pct(r['faithful'])} | {pct(r['unfaithful'])} | {100 * r['unspecified_rate']:.1f} | {100 * r['parse_rate']:.1f} |")
+        L.append("")
+    if jd.get("diag"):
+        L += ["## Judge — correct diagnosis (E1 no location vs E2 location given, Amendment 5)", "", "| Split | Model | None | Given | Given − none | p (Holm) |", "|---|---|---|---|---|---|"]
+        tests = {(t["split"], t["model"]): t for t in jd["h2_tests"]}
+        for split, by_model in jd["diag"].items():
+            for m, r in by_model.items():
+                t = tests.get((split, m))
+                d = f"{100 * t['diff']:+.1f} ({100 * t['ci95'][0]:+.1f}–{100 * t['ci95'][1]:+.1f}) | {t['p_holm']:.3g}" if t else "— | —"
+                L.append(f"| {split} | {m} | {pct(r.get('none'))} | {pct(r.get('given'))} | {d} |")
         L.append("")
     return "\n".join(L)
 

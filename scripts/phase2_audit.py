@@ -9,6 +9,12 @@ hidden in the sheet. Fill in the `hand` column:
   faithfulness:   the step number the feedback talks about, or `none`
   misconception:  the misconception id the feedback describes (e.g. M14), or `none`
 `score` reports agreement (Gate 2 needs >= 90% for the faithfulness extractor).
+
+Binary labels (every `hand` is 0 or 1) are also accepted, and scored as:
+  faithfulness:   1 = the feedback is about the flagged step; agreement with the
+                  extractor saying "faithful"
+  misconception:  1 = the feedback correctly diagnoses the error; agreement with
+                  the mapping giving the item's true misconception
 """
 import csv
 import json
@@ -17,11 +23,12 @@ import sys
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
-from core.faithfulness import mentioned_step  # noqa: E402
+from core.faithfulness import faithfulness_label, mentioned_step  # noqa: E402
 from core.misconceptions import map_feedback  # noqa: E402
 from core.phase2 import load_items  # noqa: E402
 from core.stats import bootstrap_ci  # noqa: E402
-from scripts.phase2_score import load_runs  # noqa: E402
+from core.judge import faith_label  # noqa: E402
+from scripts.phase2_score import load_judgements, load_runs  # noqa: E402
 
 ROOT = Path(__file__).resolve().parent.parent
 NOTES = ROOT / "notes"
@@ -75,11 +82,69 @@ def make():
     print("wrote", *SHEETS.values(), sep="\n  ")
 
 
+def split_of(item_id: str) -> str:
+    return "vtg_test" if item_id.startswith("vtg-") else item_id.rsplit("-", 1)[0]
+
+
+def score_judge(name: str, rows: list[dict], hand: list[int]) -> dict | None:
+    """Agreement of the LLM judge (Amendment 5) with the same binary hand labels, once judged."""
+    judged = load_judgements()
+    task = "faith" if name == "faithfulness" else "diag"
+    pairs, missing = [], 0
+    for r, h in zip(rows, hand):
+        run = judged.get((task, "e1", split_of(r["item_id"]), r["model"]), {})
+        j = run.get("records", {}).get((r["item_id"], "none"))
+        if j is None:
+            missing += 1
+            continue
+        hit = faith_label(j["flagged"], j["verdict"]) == "faithful" if task == "faith" else j["verdict"] is True
+        pairs.append((h, int(hit)))
+    if not pairs:
+        return None
+    agree = [int(h == a) for h, a in pairs]
+    m, lo, hi = bootstrap_ci(agree)
+    am, alo, ahi = bootstrap_ci([a for _, a in pairs])
+    return {"labelled": len(pairs), "missing": missing, "agreement": m, "ci95": [lo, hi],
+            "judge_positive_rate": {"mean": am, "ci95": [alo, ahi]}}
+
+
+def score_binary(name: str, rows: list[dict]) -> dict:
+    items = {it["id"]: it for s in ("test_seen", "test_heldout", "vtg_test") for it in load_items(s)}
+    hand, auto, confusion = [], [], {}
+    for r in rows:
+        it = items[r["item_id"]]
+        if name == "faithfulness":
+            a = faithfulness_label(int(r["flagged"]), r["feedback"], it["steps"])
+            hit = a == "faithful"
+        else:
+            m = map_feedback(r["feedback"])
+            a = "unmapped" if m is None else ("match" if m == it["misconception"] else "wrong")
+            hit = a == "match"
+        h = int(r["hand"].strip())
+        hand.append(h)
+        auto.append(int(hit))
+        key = f"hand={h}/auto={a}"
+        confusion[key] = confusion.get(key, 0) + 1
+    agree = [int(h == a) for h, a in zip(hand, auto)]
+    m, lo, hi = bootstrap_ci(agree)
+    hm, hlo, hhi = bootstrap_ci(hand)
+    am, alo, ahi = bootstrap_ci(auto)
+    judge = score_judge(name, rows, hand)
+    return {**({"judge": judge} if judge else {}),"labels": "binary", "labelled": len(rows), "agreement": m, "ci95": [lo, hi],
+            "hand_positive_rate": {"mean": hm, "ci95": [hlo, hhi]},
+            "auto_positive_rate": {"mean": am, "ci95": [alo, ahi]},
+            "confusion": dict(sorted(confusion.items()))}
+
+
 def score():
     out = {}
     for name, path in SHEETS.items():
         rows = list(csv.DictReader(path.open(encoding="utf-8")))
         done = [r for r in rows if r["hand"].strip()]
+        binary = bool(done) and all(r["hand"].strip() in ("0", "1") for r in done)
+        if binary:
+            out[name] = score_binary(name, done)
+            continue
         agree = []
         for r in done:
             hand = r["hand"].strip().lower()
