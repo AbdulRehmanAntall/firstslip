@@ -197,3 +197,19 @@ Details and counts: `data/synthetic/README.md` and `PROGRESS.md` (Phase 1).
    - The 100-item hand audit labels the step each sentence discusses (or none), and agreement is exact match with the extractor's output.
 6. **Misconception accuracy.** Exact-label accuracy is primary, as pre-registered. Family-level accuracy is reported as secondary, because some seen labels (M17/M18, M1/M3) are hard to separate from one sentence. The mapping (`core/misconceptions.py`) is frozen on synthetic dev with the prompt.
 7. **Parsing.** Strict: a response without a `Step: <int>` line counts as wrong and is reported as a parse failure. It is never re-asked.
+
+### Amendment 3 — 2026-10-16 (Phase 2, before any model run)
+
+**Reason:** API cost. Under the $5 cap, `gpt-6.1-sol` could cover only about 10–35% of the grid (Amendment 2, item 2). A large open model run on the same Colab GPU covers the whole grid at no API cost, and keeps four models. No model has been run on any split.
+
+1. **Models (replaces Amendment 2, item 1).**
+   - The frontier API model is dropped.
+   - The four models are `gpt-6-luna` (API; settings as in Amendment 2), Qwen3.5-2B, Qwen3.5-4B and **Qwen3.5-27B** (FP8 weights, `Qwen/Qwen3.5-27B-FP8`).
+   - Fallbacks: Qwen3-1.7B, Qwen3-4B and `Qwen/Qwen3.5-27B-GPTQ-Int4`.
+   - The open models run on vLLM on a Colab Pro A100 with the settings of Amendment 2.
+2. **Budget (replaces Amendment 2, item 2).**
+   - The $5 cap stays.
+   - `gpt-6-luna` runs the full grid (projected about $1).
+   - Every model answers every item, so no subsample is used.
+3. **Hypothesis thresholds unchanged.** "At least 3 of 4 models" in H1, H2 and H2b now refers to these four models.
+4. **Limitation to state.** No closed frontier model is evaluated. The strongest model is a 27B open model, so the results do not say how a frontier model would perform. The VtG comparison with GPT-4o uses the published number of Srivatsa et al. (2025), not a re-run.

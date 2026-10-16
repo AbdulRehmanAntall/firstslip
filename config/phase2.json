@@ -2,13 +2,6 @@
   "spend_cap_usd": 5.0,
   "prices_note": "USD per 1M tokens, Flex tier, from developers.openai.com/api/docs/pricing on 2026-10-16. Flex = batch rates, synchronous.",
   "models": {
-    "gpt-frontier": {
-      "model": "gpt-6.1-sol",
-      "reasoning_effort": "low",
-      "max_output_tokens": 2000,
-      "service_tier": "flex",
-      "prices": {"input": 1.00, "cached_input": 0.05, "output": 5.00}
-    },
     "gpt-mini": {
       "model": "gpt-6-luna",
       "reasoning_effort": "low",
@@ -19,6 +12,8 @@
   },
   "open_models": {
     "qwen-2b": {"model": "Qwen/Qwen3.5-2B", "fallback": "Qwen/Qwen3-1.7B"},
-    "qwen-4b": {"model": "Qwen/Qwen3.5-4B", "fallback": "Qwen/Qwen3-4B"}
-  }
+    "qwen-4b": {"model": "Qwen/Qwen3.5-4B", "fallback": "Qwen/Qwen3-4B"},
+    "qwen-27b": {"model": "Qwen/Qwen3.5-27B-FP8", "fallback": "Qwen/Qwen3.5-27B-GPTQ-Int4", "gpu_memory_utilization": 0.92}
+  },
+  "open_sampling": {"temperature": 0.0, "max_tokens": 256, "thinking": false, "max_model_len": 4096}
 }

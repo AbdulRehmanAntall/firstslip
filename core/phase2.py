@@ -1,6 +1,6 @@
 """Items, experiments and the response-record format shared by every Phase 2 runner.
 
-The API runner (scripts/phase2_run.py) and the Colab vLLM notebook both build
+The API runner (scripts/phase2_run.py) and the vLLM runner (scripts/phase2_run_vllm.py) build
 requests with `requests_for` and write one `record(...)` per response, so the
 scorer (scripts/phase2_score.py) reads every model's run log the same way.
 """
@@ -23,6 +23,14 @@ EXPERIMENTS = {
     "e2": (("true",), SYNTH_SPLITS, True),
     "e3": (("off1", "rand"), SYNTH_SPLITS, True),
     "solve": (("solve",), ("dev", "test_seen"), False),
+}
+
+# Every (exp, split) a model is run on. Dev is for freezing the prompt only.
+GRIDS = {
+    "dev": [("e1", "dev"), ("e1", "vtg_dev"), ("e2", "dev"), ("e3", "dev"), ("solve", "dev")],
+    "test": [("e1", "test_seen"), ("e1", "test_heldout"), ("e1", "vtg_test"),
+             ("e2", "test_seen"), ("e2", "test_heldout"),
+             ("e3", "test_seen"), ("e3", "test_heldout"), ("solve", "test_seen")],
 }
 
 

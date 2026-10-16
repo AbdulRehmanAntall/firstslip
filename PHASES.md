@@ -154,8 +154,9 @@ MalAlgoPy's code is not public (every candidate GitHub repo returns 404), so the
 ## Phase 2 — Prompted experiments E1–E3 (28 Oct – 3 Nov, ~15 h)
 
 ### Models (four)
-- One **frontier API model** and one **low-cost API model** (versions pinned and logged; pay per call; spending cap; cache every response).
-- **Qwen3.5-2B** and **Qwen3.5-4B**, served with **vLLM** (Apache 2.0). Fallback if Qwen3.5's Gated DeltaNet layers are slow/unsupported on T4: **Qwen3-1.7B**.
+- ~~One **frontier API model**~~ and one **low-cost API model**: `gpt-6-luna` (version pinned and logged; pay per call; $5 spending cap; every response cached).
+- **Qwen3.5-2B**, **Qwen3.5-4B** and **Qwen3.5-27B (FP8)**, served with **vLLM** (Apache 2.0) on a Colab Pro A100. Fallbacks: Qwen3-1.7B / Qwen3-4B / Qwen3.5-27B-GPTQ-Int4.
+- *The frontier API model was replaced by Qwen3.5-27B for cost reasons; see Amendment 3 in `PREREGISTRATION.md`.*
 
 ### Experiments
 
