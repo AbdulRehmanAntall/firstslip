@@ -1157,5 +1157,258 @@
         }
       }
     }
+  },
+  "judge": {
+    "runs": {
+      "faith/e1/dev/qwen-27b": "20261016T164132Z_phase2judge_faith_e1_dev_qwen-27b.jsonl",
+      "faith/e1/dev/qwen-2b": "20261016T164221Z_phase2judge_faith_e1_dev_qwen-2b.jsonl",
+      "faith/e1/dev/qwen-4b": "20261016T164302Z_phase2judge_faith_e1_dev_qwen-4b.jsonl",
+      "faith/e1/vtg_dev/qwen-27b": "20261016T164331Z_phase2judge_faith_e1_vtg_dev_qwen-27b.jsonl",
+      "faith/e1/vtg_dev/qwen-2b": "20261016T164358Z_phase2judge_faith_e1_vtg_dev_qwen-2b.jsonl",
+      "faith/e1/vtg_dev/qwen-4b": "20261016T164425Z_phase2judge_faith_e1_vtg_dev_qwen-4b.jsonl",
+      "diag/e1/dev/qwen-27b": "20261016T164500Z_phase2judge_diag_e1_dev_qwen-27b.jsonl",
+      "diag/e1/dev/qwen-2b": "20261016T164539Z_phase2judge_diag_e1_dev_qwen-2b.jsonl",
+      "diag/e1/dev/qwen-4b": "20261016T164615Z_phase2judge_diag_e1_dev_qwen-4b.jsonl",
+      "diag/e2/dev/qwen-27b": "20261016T164651Z_phase2judge_diag_e2_dev_qwen-27b.jsonl",
+      "diag/e2/dev/qwen-2b": "20261016T164727Z_phase2judge_diag_e2_dev_qwen-2b.jsonl",
+      "diag/e2/dev/qwen-4b": "20261016T164803Z_phase2judge_diag_e2_dev_qwen-4b.jsonl"
+    },
+    "faith": {
+      "dev": {
+        "qwen-27b": {
+          "n": 441,
+          "parse_rate": 1.0,
+          "faithful": {
+            "n": 441,
+            "mean": 0.9455782312925171,
+            "ci95": [
+              0.9229024943310657,
+              0.9659863945578231
+            ]
+          },
+          "unfaithful": {
+            "n": 441,
+            "mean": 0.015873015873015872,
+            "ci95": [
+              0.0045351473922902496,
+              0.027210884353741496
+            ]
+          },
+          "unspecified_rate": 0.03854875283446712
+        },
+        "qwen-2b": {
+          "n": 500,
+          "parse_rate": 1.0,
+          "faithful": {
+            "n": 500,
+            "mean": 0.652,
+            "ci95": [
+              0.608,
+              0.694
+            ]
+          },
+          "unfaithful": {
+            "n": 500,
+            "mean": 0.258,
+            "ci95": [
+              0.22,
+              0.298
+            ]
+          },
+          "unspecified_rate": 0.09
+        },
+        "qwen-4b": {
+          "n": 447,
+          "parse_rate": 1.0,
+          "faithful": {
+            "n": 447,
+            "mean": 0.8612975391498882,
+            "ci95": [
+              0.8277404921700223,
+              0.8926174496644296
+            ]
+          },
+          "unfaithful": {
+            "n": 447,
+            "mean": 0.11185682326621924,
+            "ci95": [
+              0.08277404921700224,
+              0.14093959731543623
+            ]
+          },
+          "unspecified_rate": 0.026845637583892617
+        }
+      },
+      "vtg_dev": {
+        "qwen-27b": {
+          "n": 193,
+          "parse_rate": 1.0,
+          "faithful": {
+            "n": 193,
+            "mean": 0.9585492227979274,
+            "ci95": [
+              0.927461139896373,
+              0.9844559585492227
+            ]
+          },
+          "unfaithful": {
+            "n": 193,
+            "mean": 0.04145077720207254,
+            "ci95": [
+              0.015544041450777202,
+              0.07253886010362694
+            ]
+          },
+          "unspecified_rate": 0.0
+        },
+        "qwen-2b": {
+          "n": 176,
+          "parse_rate": 1.0,
+          "faithful": {
+            "n": 176,
+            "mean": 0.8295454545454546,
+            "ci95": [
+              0.7727272727272727,
+              0.8806818181818182
+            ]
+          },
+          "unfaithful": {
+            "n": 176,
+            "mean": 0.13068181818181818,
+            "ci95": [
+              0.08522727272727272,
+              0.18181818181818182
+            ]
+          },
+          "unspecified_rate": 0.03977272727272727
+        },
+        "qwen-4b": {
+          "n": 183,
+          "parse_rate": 1.0,
+          "faithful": {
+            "n": 183,
+            "mean": 0.825136612021858,
+            "ci95": [
+              0.7704918032786885,
+              0.8797814207650273
+            ]
+          },
+          "unfaithful": {
+            "n": 183,
+            "mean": 0.16939890710382513,
+            "ci95": [
+              0.11475409836065574,
+              0.22404371584699453
+            ]
+          },
+          "unspecified_rate": 0.00546448087431694
+        }
+      }
+    },
+    "diag": {
+      "dev": {
+        "qwen-27b": {
+          "none": {
+            "n": 375,
+            "mean": 0.49866666666666665,
+            "ci95": [
+              0.448,
+              0.5493333333333333
+            ]
+          },
+          "given": {
+            "n": 375,
+            "mean": 0.44533333333333336,
+            "ci95": [
+              0.39466666666666667,
+              0.496
+            ]
+          }
+        },
+        "qwen-2b": {
+          "none": {
+            "n": 375,
+            "mean": 0.07466666666666667,
+            "ci95": [
+              0.048,
+              0.10133333333333333
+            ]
+          },
+          "given": {
+            "n": 375,
+            "mean": 0.144,
+            "ci95": [
+              0.10933333333333334,
+              0.18133333333333335
+            ]
+          }
+        },
+        "qwen-4b": {
+          "none": {
+            "n": 375,
+            "mean": 0.19733333333333333,
+            "ci95": [
+              0.15733333333333333,
+              0.23733333333333334
+            ]
+          },
+          "given": {
+            "n": 375,
+            "mean": 0.19733333333333333,
+            "ci95": [
+              0.15733333333333333,
+              0.23733333333333334
+            ]
+          }
+        }
+      }
+    },
+    "h2_tests": [
+      {
+        "split": "dev",
+        "model": "qwen-27b",
+        "metric": "diagnosis_acc (given - none)",
+        "n": 375,
+        "diff": -0.05333333333333334,
+        "ci95": [
+          -0.09333333333333334,
+          -0.013333333333333334
+        ],
+        "only_a": 20,
+        "only_b": 40,
+        "p": 0.01348929373119186,
+        "p_holm": 0.02697858746238372
+      },
+      {
+        "split": "dev",
+        "model": "qwen-2b",
+        "metric": "diagnosis_acc (given - none)",
+        "n": 375,
+        "diff": 0.06933333333333333,
+        "ci95": [
+          0.037333333333333336,
+          0.104
+        ],
+        "only_a": 35,
+        "only_b": 9,
+        "p": 0.00010604466626773501,
+        "p_holm": 0.00031813399880320503
+      },
+      {
+        "split": "dev",
+        "model": "qwen-4b",
+        "metric": "diagnosis_acc (given - none)",
+        "n": 375,
+        "diff": 0.0,
+        "ci95": [
+          -0.029333333333333333,
+          0.029333333333333333
+        ],
+        "only_a": 16,
+        "only_b": 16,
+        "p": 1.0,
+        "p_holm": 1.0
+      }
+    ]
   }
 }

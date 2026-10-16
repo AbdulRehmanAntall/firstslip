@@ -198,7 +198,12 @@ _Planned: 28 Oct – 3 Nov 2026, ~15 h · Gate: all E1–E3 tables filled; extra
 - **Carry-over:**
   - [x] Hand audits labelled and scored (`results/phase2/audit.json`).
   - [x] Decided: replace both with an LLM judge (Amendment 5). Code: `core/judge.py` (j-v1), `scripts/phase2_judge_vllm.py`, Steps 3–4 of the Colab notebook; the scorer and audit read the judge logs.
-  - [ ] Run the judge on dev (notebook Step 3), check the parse rate and outputs, then freeze j-v1.
+  - [x] Run the judge on dev (notebook Step 3), check the parse rate and outputs, then freeze j-v1.
+    - 12 logs `runs/20261016T164132Z_phase2judge_*` – `runs/20261016T164803Z_phase2judge_diag_e2_dev_qwen-4b.jsonl`, at `799c293` (dirty: notebook only), vLLM 0.31.0, Qwen3.5-27B-FP8 @ `97f5941bf617`.
+    - Parse rate 100% on all 4,190 judgements. Every output is a single `Step: n` / `Verdict: yes|no` line.
+    - Read-through (~40 items over all classes): unfaithful cases are real (often the 2B model flags step 1 and then criticises step 2). `Step: 0` is almost always self-retracting feedback ("wait, let me re-evaluate … Step 1 is correct"). Diagnosis "no" covers wrong corrections and misread problems. A few borderline cases, but no systematic error. **j-v1 frozen unchanged.**
+    - Unspecified falls from 53–92% (extractor) to 0–9%. Dev faithful / unfaithful / unspecified: 27B 94.6 / 1.6 / 3.9%, 4B 86.1 / 11.2 / 2.7%, 2B 65.2 / 25.8 / 9.0% (VtG dev: 95.9 / 4.1 / 0, 82.5 / 16.9 / 0.5, 83.0 / 13.1 / 4.0%).
+    - Dev diagnosis accuracy, none → given: 27B 49.9 → 44.5%, 4B 19.7 → 19.7%, 2B 7.5 → 14.4%. This is the same pattern as the m-v1 test result.
   - [ ] Run the judge on test (Step 4), then `python scripts/phase2_score.py` and `python scripts/phase2_audit.py score`. Gate 2 passes if judge faithfulness agreement is ≥ 90%.
 
 ---
