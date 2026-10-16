@@ -147,11 +147,19 @@ _Planned: 19 – 27 Oct 2026, ~16 h · Gate: checker 100% on 2,000 generated ite
 ## Phase 2 — Prompted experiments E1–E3
 _Planned: 28 Oct – 3 Nov 2026, ~15 h · Gate: all E1–E3 tables filled; extractor ≥ 90% agreement with hand labels_
 
-- **Status:** not started
-- **Dates / hours:**
+- **Status:** in progress. The pipeline is built and tested; no model has been run yet.
+- **Dates / hours:** started 16 Oct 2026.
 - **Gate:**
 - **What was done:**
+  - Prompt template and strict parser (`core/prompts.py`, `PROMPT_VERSION` p2-v1, not yet frozen).
+  - OpenAI client with an SQLite response cache and a hard $5 cap checked before each call (`core/llm.py`, `config/phase2.json`).
+  - Faithfulness extractor and misconception mapping.
+  - McNemar, paired bootstrap and Holm (`core/stats.py`).
+  - Runner, scorer and audit scripts, and the Colab vLLM notebook.
+  - Design decisions recorded as Amendment 2 in `PREREGISTRATION.md`.
+  - 27 new tests; 57 in total pass.
 - **Key results / numbers:** (E1 accuracies/F1 per model, E2 grounding effect, E3 deference rate, extractor agreement, API spend)
+  - Projected API cost of the full grid at ~400 output tokens per reply: `gpt-6-luna` ≈ $0.93; `gpt-6.1-sol` ≈ $18.6, which exceeds the $5 cap, so the frontier model runs on a subsample (Amendment 2).
 - **Artifacts:**
 - **Deviations from plan:**
 - **Issues / open questions:**

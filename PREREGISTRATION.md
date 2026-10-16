@@ -169,3 +169,31 @@ Each correct reduction is one step and ends at T1 (for example T9 → T7 → T2 
 5. **Deduplication (§4, rule 4).** The canonical form is the unevaluated SymPy tree of each side (`srepr`, `evaluate=False`).
 
 Details and counts: `data/synthetic/README.md` and `PROGRESS.md` (Phase 1).
+
+### Amendment 2 — 2026-10-16 (Phase 2, before any model run)
+
+**Reason:** These are Phase 2 implementation details that §5–§6 left open, plus a budget constraint. No model has been run on any split.
+
+1. **Models.**
+   - Frontier API model: `gpt-6.1-sol`. Low-cost API model: `gpt-6-luna`.
+   - Both use reasoning effort `low` (the lowest level `gpt-6.1-sol` supports), `max_output_tokens` 2000 and the Flex service tier.
+   - Open models: Qwen3.5-2B and Qwen3.5-4B (fallback Qwen3-1.7B / Qwen3-4B), served with vLLM on a Colab Pro A100. They use greedy decoding, thinking off, and are pinned to a Hugging Face commit SHA.
+   - Every run log records the exact model snapshot returned by the API or the HF SHA.
+2. **Budget.** The API spending cap for all of Phase 2 is **$5**, enforced in code (`core/llm.py`) before each call.
+   - `gpt-6-luna` runs the full grid.
+   - `gpt-6.1-sol` runs a **fixed, nested, seeded subsample** of each split (seed `20261028`, clean/incorrect ratio kept). Its size is set once from the token usage measured on dev and recorded here before any test run.
+   - Comparisons involving the frontier model use only the items it answered (paired).
+3. **Conditions.**
+   - E2's "no location" arm is the E1 response itself (same prompt, same items), so it is not run twice.
+   - E2 and E3 run on incorrect items only, because a clean item has no location to give or corrupt.
+   - E3 "true" is the E2 "location given" condition.
+   - "One step off" picks k−1 or k+1 at random within the solution.
+   - "Random wrong" is uniform over all steps ≠ k.
+   - Supplied locations come from an RNG seeded by (`20261028`, item id, condition).
+4. **H1 solving condition.** Each model solves each test-seen equation once ("Answer: x = …"). The answer is compared with the correct solution by SymPy solution set. The paired comparison uses the incorrect test-seen items.
+5. **Faithfulness.** The extractor (`core/faithfulness.py`) labels each response that flags a step as *faithful* (it names the flagged step), *unfaithful* (it names another step) or *unspecified* (it names no identifiable step).
+   - H1b's "discusses a step other than the one flagged" is the *unfaithful* share over all responses that flag a step.
+   - The *unspecified* share is reported next to it.
+   - The 100-item hand audit labels the step each sentence discusses (or none), and agreement is exact match with the extractor's output.
+6. **Misconception accuracy.** Exact-label accuracy is primary, as pre-registered. Family-level accuracy is reported as secondary, because some seen labels (M17/M18, M1/M3) are hard to separate from one sentence. The mapping (`core/misconceptions.py`) is frozen on synthetic dev with the prompt.
+7. **Parsing.** Strict: a response without a `Step: <int>` line counts as wrong and is reported as a parse failure. It is never re-asked.

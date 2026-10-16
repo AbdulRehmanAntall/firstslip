@@ -166,12 +166,12 @@ MalAlgoPy's code is not public (every candidate GitHub repo returns 404), so the
 | E3 Corrupted tool | RQ2 | Location given is the true step, one step off, or a random wrong step | Synthetic tests |
 
 ### Tasks
-- [ ] Write **one prompt template** and the **output parser** (fixed format: step number or 0, then one sentence).
+- [x] Write **one prompt template** and the **output parser** (fixed format: step number or 0, then one sentence). *(`core/prompts.py`; API runner `scripts/phase2_run.py`, Colab vLLM notebook `notebooks/phase2_colab_vllm.ipynb`.)*
 - [ ] **Freeze both** using the dev splits only (synthetic dev + VtG dev).
 - [ ] Run **E1** on all four models across **both synthetic tests and VtG test**, caching every response. Report VtG results on all 802 rows **and separately without the "None of the above" category** (8.7% of VtG, least consistent labels).
 - [ ] Run **E2** on the synthetic tests.
 - [ ] Run **E3** on the synthetic tests (true / one-off / random-wrong location); compute deference rate.
-- [ ] Build the **faithfulness extractor** (rule-based: finds the step the feedback sentence mentions).
+- [x] Build the **faithfulness extractor** (rule-based: finds the step the feedback sentence mentions). *(`core/faithfulness.py`; misconception mapping in `core/misconceptions.py`.)*
 - [ ] **Audit 100 items by hand** for faithfulness; report extractor–hand agreement.
 - [ ] Audit misconception-name mapping on **100 items by hand**.
 - [ ] Produce **result tables with bootstrap intervals** (paired bootstrap, McNemar, Holm).
