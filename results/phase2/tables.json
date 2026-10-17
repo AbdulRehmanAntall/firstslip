@@ -2027,5 +2027,445 @@
         }
       }
     }
+  },
+  "judge": {
+    "runs": {
+      "faith/e1/dev/qwen-27b": "20261016T164132Z_phase2judge_faith_e1_dev_qwen-27b.jsonl",
+      "faith/e1/dev/qwen-2b": "20261016T164221Z_phase2judge_faith_e1_dev_qwen-2b.jsonl",
+      "faith/e1/dev/qwen-4b": "20261016T164302Z_phase2judge_faith_e1_dev_qwen-4b.jsonl",
+      "faith/e1/vtg_dev/qwen-27b": "20261016T164331Z_phase2judge_faith_e1_vtg_dev_qwen-27b.jsonl",
+      "faith/e1/vtg_dev/qwen-2b": "20261016T164358Z_phase2judge_faith_e1_vtg_dev_qwen-2b.jsonl",
+      "faith/e1/vtg_dev/qwen-4b": "20261016T164425Z_phase2judge_faith_e1_vtg_dev_qwen-4b.jsonl",
+      "diag/e1/dev/qwen-27b": "20261016T164500Z_phase2judge_diag_e1_dev_qwen-27b.jsonl",
+      "diag/e1/dev/qwen-2b": "20261016T164539Z_phase2judge_diag_e1_dev_qwen-2b.jsonl",
+      "diag/e1/dev/qwen-4b": "20261016T164615Z_phase2judge_diag_e1_dev_qwen-4b.jsonl",
+      "diag/e2/dev/qwen-27b": "20261016T164651Z_phase2judge_diag_e2_dev_qwen-27b.jsonl",
+      "diag/e2/dev/qwen-2b": "20261016T164727Z_phase2judge_diag_e2_dev_qwen-2b.jsonl",
+      "diag/e2/dev/qwen-4b": "20261016T164803Z_phase2judge_diag_e2_dev_qwen-4b.jsonl",
+      "faith/e1/test_seen/qwen-27b": "20261017T012327Z_phase2judge_faith_e1_test_seen_qwen-27b.jsonl",
+      "faith/e1/test_seen/qwen-2b": "20261017T012502Z_phase2judge_faith_e1_test_seen_qwen-2b.jsonl",
+      "faith/e1/test_seen/qwen-4b": "20261017T012622Z_phase2judge_faith_e1_test_seen_qwen-4b.jsonl",
+      "faith/e1/test_heldout/qwen-27b": "20261017T012746Z_phase2judge_faith_e1_test_heldout_qwen-27b.jsonl",
+      "faith/e1/test_heldout/qwen-2b": "20261017T012922Z_phase2judge_faith_e1_test_heldout_qwen-2b.jsonl",
+      "faith/e1/test_heldout/qwen-4b": "20261017T013050Z_phase2judge_faith_e1_test_heldout_qwen-4b.jsonl",
+      "faith/e1/vtg_test/qwen-27b": "20261017T013235Z_phase2judge_faith_e1_vtg_test_qwen-27b.jsonl",
+      "faith/e1/vtg_test/qwen-2b": "20261017T013419Z_phase2judge_faith_e1_vtg_test_qwen-2b.jsonl",
+      "faith/e1/vtg_test/qwen-4b": "20261017T013556Z_phase2judge_faith_e1_vtg_test_qwen-4b.jsonl",
+      "diag/e1/test_seen/qwen-27b": "20261017T013706Z_phase2judge_diag_e1_test_seen_qwen-27b.jsonl",
+      "diag/e1/test_seen/qwen-2b": "20261017T013822Z_phase2judge_diag_e1_test_seen_qwen-2b.jsonl",
+      "diag/e1/test_seen/qwen-4b": "20261017T013934Z_phase2judge_diag_e1_test_seen_qwen-4b.jsonl",
+      "diag/e1/test_heldout/qwen-27b": "20261017T014048Z_phase2judge_diag_e1_test_heldout_qwen-27b.jsonl",
+      "diag/e1/test_heldout/qwen-2b": "20261017T014206Z_phase2judge_diag_e1_test_heldout_qwen-2b.jsonl",
+      "diag/e1/test_heldout/qwen-4b": "20261017T014322Z_phase2judge_diag_e1_test_heldout_qwen-4b.jsonl",
+      "diag/e2/test_seen/qwen-27b": "20261017T014431Z_phase2judge_diag_e2_test_seen_qwen-27b.jsonl",
+      "diag/e2/test_seen/qwen-2b": "20261017T014543Z_phase2judge_diag_e2_test_seen_qwen-2b.jsonl",
+      "diag/e2/test_seen/qwen-4b": "20261017T014655Z_phase2judge_diag_e2_test_seen_qwen-4b.jsonl",
+      "diag/e2/test_heldout/qwen-27b": "20261017T014810Z_phase2judge_diag_e2_test_heldout_qwen-27b.jsonl",
+      "diag/e2/test_heldout/qwen-2b": "20261017T014925Z_phase2judge_diag_e2_test_heldout_qwen-2b.jsonl",
+      "diag/e2/test_heldout/qwen-4b": "20261017T015041Z_phase2judge_diag_e2_test_heldout_qwen-4b.jsonl"
+    },
+    "faith": {
+      "test_seen": {
+        "qwen-27b": {
+          "n": 872,
+          "parse_rate": 1.0,
+          "faithful": {
+            "n": 872,
+            "mean": 0.9552752293577982,
+            "ci95": [
+              0.9415137614678899,
+              0.9678899082568807
+            ]
+          },
+          "unfaithful": {
+            "n": 872,
+            "mean": 0.008027522935779817,
+            "ci95": [
+              0.0022935779816513763,
+              0.013761467889908258
+            ]
+          },
+          "unspecified_rate": 0.03669724770642202
+        },
+        "qwen-2b": {
+          "n": 999,
+          "parse_rate": 1.0,
+          "faithful": {
+            "n": 999,
+            "mean": 0.6806806806806807,
+            "ci95": [
+              0.6516516516516516,
+              0.7087087087087087
+            ]
+          },
+          "unfaithful": {
+            "n": 999,
+            "mean": 0.24524524524524524,
+            "ci95": [
+              0.21921921921921922,
+              0.2722722722722723
+            ]
+          },
+          "unspecified_rate": 0.07407407407407407
+        },
+        "qwen-4b": {
+          "n": 875,
+          "parse_rate": 1.0,
+          "faithful": {
+            "n": 875,
+            "mean": 0.8777142857142857,
+            "ci95": [
+              0.856,
+              0.8994285714285715
+            ]
+          },
+          "unfaithful": {
+            "n": 875,
+            "mean": 0.09257142857142857,
+            "ci95": [
+              0.07314285714285715,
+              0.112
+            ]
+          },
+          "unspecified_rate": 0.029714285714285714
+        }
+      },
+      "test_heldout": {
+        "qwen-27b": {
+          "n": 896,
+          "parse_rate": 1.0,
+          "faithful": {
+            "n": 896,
+            "mean": 0.9654017857142857,
+            "ci95": [
+              0.953125,
+              0.9765625
+            ]
+          },
+          "unfaithful": {
+            "n": 896,
+            "mean": 0.004464285714285714,
+            "ci95": [
+              0.0011160714285714285,
+              0.008928571428571428
+            ]
+          },
+          "unspecified_rate": 0.030133928571428572
+        },
+        "qwen-2b": {
+          "n": 1000,
+          "parse_rate": 1.0,
+          "faithful": {
+            "n": 1000,
+            "mean": 0.7,
+            "ci95": [
+              0.672,
+              0.729
+            ]
+          },
+          "unfaithful": {
+            "n": 1000,
+            "mean": 0.233,
+            "ci95": [
+              0.207,
+              0.259
+            ]
+          },
+          "unspecified_rate": 0.067
+        },
+        "qwen-4b": {
+          "n": 927,
+          "parse_rate": 1.0,
+          "faithful": {
+            "n": 927,
+            "mean": 0.9147788565264293,
+            "ci95": [
+              0.8964401294498382,
+              0.9320388349514563
+            ]
+          },
+          "unfaithful": {
+            "n": 927,
+            "mean": 0.05393743257820928,
+            "ci95": [
+              0.039913700107874865,
+              0.06903991370010787
+            ]
+          },
+          "unspecified_rate": 0.03128371089536138
+        }
+      },
+      "vtg_test": {
+        "qwen-27b": {
+          "n": 774,
+          "parse_rate": 1.0,
+          "faithful": {
+            "n": 774,
+            "mean": 0.975452196382429,
+            "ci95": [
+              0.9638242894056848,
+              0.9857881136950905
+            ]
+          },
+          "unfaithful": {
+            "n": 774,
+            "mean": 0.023255813953488372,
+            "ci95": [
+              0.012919896640826873,
+              0.03488372093023256
+            ]
+          },
+          "unspecified_rate": 0.0012919896640826874
+        },
+        "qwen-2b": {
+          "n": 745,
+          "parse_rate": 1.0,
+          "faithful": {
+            "n": 745,
+            "mean": 0.763758389261745,
+            "ci95": [
+              0.7328859060402685,
+              0.7932885906040269
+            ]
+          },
+          "unfaithful": {
+            "n": 745,
+            "mean": 0.18791946308724833,
+            "ci95": [
+              0.1610738255033557,
+              0.21610738255033557
+            ]
+          },
+          "unspecified_rate": 0.04832214765100671
+        },
+        "qwen-4b": {
+          "n": 705,
+          "parse_rate": 1.0,
+          "faithful": {
+            "n": 705,
+            "mean": 0.8070921985815603,
+            "ci95": [
+              0.7773049645390071,
+              0.8368794326241135
+            ]
+          },
+          "unfaithful": {
+            "n": 705,
+            "mean": 0.17163120567375886,
+            "ci95": [
+              0.14468085106382977,
+              0.2
+            ]
+          },
+          "unspecified_rate": 0.02127659574468085
+        }
+      }
+    },
+    "diag": {
+      "test_seen": {
+        "qwen-27b": {
+          "none": {
+            "n": 750,
+            "mean": 0.4693333333333333,
+            "ci95": [
+              0.43333333333333335,
+              0.5053333333333333
+            ]
+          },
+          "given": {
+            "n": 750,
+            "mean": 0.48933333333333334,
+            "ci95": [
+              0.45466666666666666,
+              0.5253333333333333
+            ]
+          }
+        },
+        "qwen-2b": {
+          "none": {
+            "n": 750,
+            "mean": 0.096,
+            "ci95": [
+              0.07466666666666667,
+              0.11733333333333333
+            ]
+          },
+          "given": {
+            "n": 750,
+            "mean": 0.14133333333333334,
+            "ci95": [
+              0.11733333333333333,
+              0.16666666666666666
+            ]
+          }
+        },
+        "qwen-4b": {
+          "none": {
+            "n": 750,
+            "mean": 0.18133333333333335,
+            "ci95": [
+              0.15466666666666667,
+              0.20933333333333334
+            ]
+          },
+          "given": {
+            "n": 750,
+            "mean": 0.17733333333333334,
+            "ci95": [
+              0.15066666666666667,
+              0.20533333333333334
+            ]
+          }
+        }
+      },
+      "test_heldout": {
+        "qwen-27b": {
+          "none": {
+            "n": 750,
+            "mean": 0.7653333333333333,
+            "ci95": [
+              0.7346666666666667,
+              0.7946666666666666
+            ]
+          },
+          "given": {
+            "n": 750,
+            "mean": 0.7746666666666666,
+            "ci95": [
+              0.744,
+              0.804
+            ]
+          }
+        },
+        "qwen-2b": {
+          "none": {
+            "n": 750,
+            "mean": 0.128,
+            "ci95": [
+              0.10533333333333333,
+              0.15333333333333332
+            ]
+          },
+          "given": {
+            "n": 750,
+            "mean": 0.17733333333333334,
+            "ci95": [
+              0.15066666666666667,
+              0.204
+            ]
+          }
+        },
+        "qwen-4b": {
+          "none": {
+            "n": 750,
+            "mean": 0.31866666666666665,
+            "ci95": [
+              0.2853333333333333,
+              0.352
+            ]
+          },
+          "given": {
+            "n": 750,
+            "mean": 0.3506666666666667,
+            "ci95": [
+              0.31733333333333336,
+              0.384
+            ]
+          }
+        }
+      }
+    },
+    "h2_tests": [
+      {
+        "split": "test_seen",
+        "model": "qwen-27b",
+        "metric": "diagnosis_acc (given - none)",
+        "n": 750,
+        "diff": 0.02,
+        "ci95": [
+          -0.008033333333333304,
+          0.048
+        ],
+        "only_a": 67,
+        "only_b": 52,
+        "p": 0.19915839818564499,
+        "p_holm": 0.597475194556935
+      },
+      {
+        "split": "test_seen",
+        "model": "qwen-2b",
+        "metric": "diagnosis_acc (given - none)",
+        "n": 750,
+        "diff": 0.04533333333333334,
+        "ci95": [
+          0.018666666666666668,
+          0.072
+        ],
+        "only_a": 68,
+        "only_b": 34,
+        "p": 0.000986536808184603,
+        "p_holm": 0.005328822702539316
+      },
+      {
+        "split": "test_seen",
+        "model": "qwen-4b",
+        "metric": "diagnosis_acc (given - none)",
+        "n": 750,
+        "diff": -0.004,
+        "ci95": [
+          -0.028,
+          0.02
+        ],
+        "only_a": 40,
+        "only_b": 43,
+        "p": 0.8264047244491927,
+        "p_holm": 0.8852520098929428
+      },
+      {
+        "split": "test_heldout",
+        "model": "qwen-27b",
+        "metric": "diagnosis_acc (given - none)",
+        "n": 750,
+        "diff": 0.009333333333333334,
+        "ci95": [
+          -0.010666666666666666,
+          0.029333333333333333
+        ],
+        "only_a": 34,
+        "only_b": 27,
+        "p": 0.4426260049464714,
+        "p_holm": 0.8852520098929428
+      },
+      {
+        "split": "test_heldout",
+        "model": "qwen-2b",
+        "metric": "diagnosis_acc (given - none)",
+        "n": 750,
+        "diff": 0.04933333333333333,
+        "ci95": [
+          0.021333333333333333,
+          0.07733333333333334
+        ],
+        "only_a": 78,
+        "only_b": 41,
+        "p": 0.0008881371170898861,
+        "p_holm": 0.005328822702539316
+      },
+      {
+        "split": "test_heldout",
+        "model": "qwen-4b",
+        "metric": "diagnosis_acc (given - none)",
+        "n": 750,
+        "diff": 0.032,
+        "ci95": [
+          0.004,
+          0.06
+        ],
+        "only_a": 71,
+        "only_b": 47,
+        "p": 0.033788175471825846,
+        "p_holm": 0.13515270188730338
+      }
+    ]
   }
 }

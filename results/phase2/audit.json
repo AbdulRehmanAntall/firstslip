@@ -1,5 +1,21 @@
 {
   "faithfulness": {
+    "judge": {
+      "labelled": 100,
+      "missing": 0,
+      "agreement": 0.97,
+      "ci95": [
+        0.93,
+        1.0
+      ],
+      "judge_positive_rate": {
+        "mean": 0.9,
+        "ci95": [
+          0.84,
+          0.95
+        ]
+      }
+    },
     "labels": "binary",
     "labelled": 100,
     "agreement": 0.21,
@@ -31,6 +47,22 @@
     }
   },
   "misconception": {
+    "judge": {
+      "labelled": 100,
+      "missing": 0,
+      "agreement": 0.88,
+      "ci95": [
+        0.81,
+        0.94
+      ],
+      "judge_positive_rate": {
+        "mean": 0.38,
+        "ci95": [
+          0.29,
+          0.48
+        ]
+      }
+    },
     "labels": "binary",
     "labelled": 100,
     "agreement": 0.69,

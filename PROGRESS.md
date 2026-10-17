@@ -147,9 +147,9 @@ _Planned: 19 – 27 Oct 2026, ~16 h · Gate: checker 100% on 2,000 generated ite
 ## Phase 2 — Prompted experiments E1–E3
 _Planned: 28 Oct – 3 Nov 2026, ~15 h · Gate: all E1–E3 tables filled; extractor ≥ 90% agreement with hand labels_
 
-- **Status:** in progress. All three models (Qwen3.5-2B, 4B, 27B) have been run on the full grid (dev + test) and scored. The hand audits are not done.
-- **Dates / hours:** started 16 Oct 2026. Qwen runs 16 Oct, 14:58–15:38 UTC, Colab A100.
-- **Gate:** **not passed.** The E1–E3 tables are filled for all three models. The faithfulness extractor agrees with hand labels on **21%** (13–29%) of 100 audited items; the gate needs ≥ 90% (`results/phase2/audit.json`).
+- **Status:** done. All three models (Qwen3.5-2B, 4B, 27B) have been run on the full grid (dev + test), judged (Amendment 5) and scored.
+- **Dates / hours:** started 16 Oct 2026. Qwen runs 16 Oct, 14:58–15:38 UTC; judge test run 17 Oct, 01:23–01:51 UTC; Colab A100.
+- **Gate:** **passed** (via Amendment 5). The E1–E3 tables are filled for all three models. The rule-based extractor agrees with hand labels on only 21% (13–29%), but the LLM judge (j-v1) agrees on **97%** (93–100%) of the 100 audited items, above the 90% bar (`results/phase2/audit.json`).
 - **What was done:**
   - Prompt template and strict parser (`core/prompts.py`, `PROMPT_VERSION` p2-v1, not yet frozen).
   - OpenAI client with an SQLite response cache and a hard $5 cap checked before each call (`core/llm.py`, `config/phase2.json`).
@@ -204,7 +204,12 @@ _Planned: 28 Oct – 3 Nov 2026, ~15 h · Gate: all E1–E3 tables filled; extra
     - Read-through (~40 items over all classes): unfaithful cases are real (often the 2B model flags step 1 and then criticises step 2). `Step: 0` is almost always self-retracting feedback ("wait, let me re-evaluate … Step 1 is correct"). Diagnosis "no" covers wrong corrections and misread problems. A few borderline cases, but no systematic error. **j-v1 frozen unchanged.**
     - Unspecified falls from 53–92% (extractor) to 0–9%. Dev faithful / unfaithful / unspecified: 27B 94.6 / 1.6 / 3.9%, 4B 86.1 / 11.2 / 2.7%, 2B 65.2 / 25.8 / 9.0% (VtG dev: 95.9 / 4.1 / 0, 82.5 / 16.9 / 0.5, 83.0 / 13.1 / 4.0%).
     - Dev diagnosis accuracy, none → given: 27B 49.9 → 44.5%, 4B 19.7 → 19.7%, 2B 7.5 → 14.4%. This is the same pattern as the m-v1 test result.
-  - [ ] Run the judge on test (Step 4), then `python scripts/phase2_score.py` and `python scripts/phase2_audit.py score`. Gate 2 passes if judge faithfulness agreement is ≥ 90%.
+  - [x] Run the judge on test (Step 4), then `python scripts/phase2_score.py` and `python scripts/phase2_audit.py score`. Gate 2 passes if judge faithfulness agreement is ≥ 90%.
+    - 21 logs `runs/20261017T012327Z_phase2judge_faith_e1_test_seen_qwen-27b.jsonl` – `runs/20261017T015041Z_phase2judge_diag_e2_test_heldout_qwen-4b.jsonl`, at `8eb9479` (dirty), j-v1, vLLM 0.31.0, Qwen3.5-27B-FP8 @ `97f5941bf617`. Parse rate 100% on all 16,793 judgements.
+    - A first Step 4 attempt crashed before judging anything: the synthetic `.jsonl` files are gitignored and the regenerate cell had not been run in that Colab session. The Step 4 zip pattern now matches test logs only, so a failed run can no longer ship the dev logs.
+    - **Validation against the hand labels:** faithfulness agreement **97%** (93–100%), so **Gate 2 passes**. Diagnosis agreement 88% (81–94%); the judge calls 38% correct vs 48% by hand, so it is somewhat strict.
+    - **H1b (judge):** unfaithful share on test_seen: 2B 24.5% (21.9–27.2), 4B 9.3% (7.3–11.2), 27B 0.8% (0.2–1.4). The CI lower bound is ≥ 5% for 2B and 4B, so **H1b is supported**. Held-out and VtG show the same order (2B 23.3 / 18.8%, 4B 5.4 / 17.2%, 27B 0.4 / 2.3%).
+    - **H2 (judge diagnosis, none → given):** seen 27B 46.9 → 48.9 (p = 0.60), 4B 18.1 → 17.7 (p = 0.89), 2B 9.6 → 14.1 (p = 0.005); held-out 27B 76.5 → 77.5, 4B 31.9 → 35.1 (p = 0.14), 2B 12.8 → 17.7 (p = 0.005). Only 2B rises significantly, and 2B copies the given step 100% of the time (E3), so this is not evidence of grounding. 1 of 3 models: **H2 is not supported.**
 
 ---
 
