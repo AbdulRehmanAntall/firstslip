@@ -191,13 +191,13 @@ MalAlgoPy's code is not public (every candidate GitHub repo returns 404), so the
 ## Phase 3 — Student app (4 – 9 Nov, ~12 h)
 
 ### Tasks
-- [ ] **FastAPI endpoint:** problem + steps in → per-step check and feedback out.
-- [ ] **Single page** with **MathLive** input (outputs LaTeX), **one line per step**, **green or red mark per step**.
-- [ ] **Feedback panel** that labels **checker-verified claims separately from the model's guesses**.
-- [ ] Unparseable input: show a clear **"could not read this line"** message rather than a guess.
-- [ ] **Deploy to Hugging Face Spaces** (free CPU) with a **per-session request cap**.
-- [ ] App keeps **no logs by default**.
-- [ ] Add a **results page** with the E1–E3 findings.
+- [x] **FastAPI endpoint:** problem + steps in → per-step check and feedback out. *(`app/main.py`, `POST /api/check`.)*
+- [x] **Single page** with **MathLive** input (outputs LaTeX), **one line per step**, **green or red mark per step**.
+- [x] **Feedback panel** that labels **checker-verified claims separately from the model's guesses**.
+- [x] Unparseable input: show a clear **"could not read this line"** message rather than a guess.
+- [x] **Deploy to Hugging Face Spaces** (free CPU) with a **per-session request cap**. *(Static Space, checker in the browser; see PROGRESS.md deviations. The caps apply to the server version.)*
+- [x] App keeps **no logs by default**.
+- [x] Add a **results page** with the E1–E3 findings.
 
 ### Reading (Phases 3 and 6)
 - [ ] **D1** — *Generative AI without guardrails can harm learning* (Bastani et al., PNAS 2025). Evidence behind the corrupted-tool control.

@@ -216,15 +216,33 @@ _Planned: 28 Oct – 3 Nov 2026, ~15 h · Gate: all E1–E3 tables filled; extra
 ## Phase 3 — Student app (cut line)
 _Planned: 4 – 9 Nov 2026, ~12 h · Gate: a friend can solve, make a mistake and get feedback on a phone_
 
-- **Status:** not started
-- **Dates / hours:**
-- **Gate:**
+- **Status:** in progress. App deployed as a static Space: https://huggingface.co/spaces/AbdulRehman420/firstslip. Gate not yet checked.
+- **Dates / hours:** started 17 Oct 2026.
+- **Gate:** not yet checked (needs a friend on a phone).
 - **What was done:**
+  - `app/main.py`: FastAPI. `POST /api/check` takes the problem and steps (MathLive LaTeX) and returns a status per step (`same` / `changed` / `unreadable` / `incomparable` / `empty`), the checker's verified claims, and, when a step is wrong, the model's explanation. `/` is the checker, `/results` the E1–E3 findings. No API docs routes.
+  - `app/checking.py`: the Phase 1 checker (`core.checker.parse_line` / `same`, unchanged), applied line by line. Verified claims: the first step that changes the answer, with the solution before and after it; unreadable lines; or "every step keeps the solution".
+  - `app/mathnorm.py`: MathLive LaTeX → plain text for the checker. The plain path reads `\cdot`, Unicode minus and decimals (as exact fractions), which SymPy's LaTeX parser rejects or turns into floats; `\sqrt` and the like fall back to the LaTeX parser.
+  - `app/feedback.py`: Qwen3.5-27B through Hugging Face Inference Providers, with the frozen prompt p2-v1 in the E2 "true location" condition (the model is told the checker's step). The reply is shown as *not verified*; if its step differs from the checker's, the page warns that it may be about the wrong step (H1b). The model is only called when the checker finds an error.
+  - `app/static/`: single page with one MathLive field per step, ✓ / ✗ / ? per step, a *Verified* panel and a separate *Not verified* panel; "New problem" and "Show an example with a mistake" buttons; results page with the Phase 2 charts.
+  - Caps (in memory only): 40 checks and 15 model explanations per session cookie, 300 model explanations per day in total. No access log; nothing typed is stored.
+  - `space/` (Dockerfile, Space README, requirements) and `scripts/deploy_space.py`, which uploads only `space/`, `app/` and the three `core` files the app needs.
+  - Browser build: the page runs the checker itself with Pyodide 0.26.4, loading `core/checker.py`, `app/checking.py` and `app/mathnorm.py` unchanged and SymPy 1.14.0 / mpmath 1.3.0 / lark 1.3.1 from PyPI (the study's versions). First load about 10 s, then each check takes 40–600 ms (measured in Node's Pyodide on the five test cases; same results as the server). The model's guess comes from `POST api/explain` when a server provides it; on static hosting the page says no model is attached.
+  - `scripts/deploy_space.py`: static bundle by default (`space/static/README.md`, `app/static/`, `py/<the five files>`); `--docker` deploys the FastAPI server (`space/docker/`).
+  - 30 new tests (`tests/test_app.py`); 89 in total pass.
 - **Key results / numbers:**
-- **Artifacts:** (Space URL, results page)
+- **Artifacts:** Space https://huggingface.co/spaces/AbdulRehman420/firstslip (app: https://abdulrehman420-firstslip.static.hf.space, results page: `/results.html`).
 - **Deviations from plan:**
+  - **Static Space, checker only.** Hugging Face now requires PRO to host Docker or Gradio Spaces, even on free CPU (HTTP 402 on 17 Oct). The deployed app is therefore a static Space: the checker runs in the browser and there is no model explanation. The verified / not-verified split is in the page, but only the verified panel has content online. The per-session cap is not needed there, since nothing runs on a server; the caps are in the server version (`app/main.py`), which can be deployed with `--docker` if PRO is added.
+  - In the server version, the app calls `Qwen/Qwen3.5-27B` (BF16, served by Inference Providers) rather than the FP8 checkpoint used in Phase 2, and providers may differ in numerics. The prompt is the same frozen p2-v1.
 - **Issues / open questions:**
+  - The Hugging Face account has no Inference Providers credit (HTTP 402 on 17 Oct), so the server version could not be tested against the live model; its model path is covered by tests with a fake client only.
+  - The page has not been checked in a real browser by the assistant (no browser tool available); the Python path was checked in Node's Pyodide and the files on the Space were checked over HTTP.
 - **Carry-over:**
+  - [x] Deploy the Space (static).
+  - [ ] Optional: HF PRO + inference credit, then `python scripts/deploy_space.py --repo AbdulRehman420/firstslip --docker` and a read token as the `HF_TOKEN` secret, to add the model's explanation.
+  - [ ] Gate: a friend solves a problem on a phone, makes a mistake and gets feedback.
+  - [ ] Short resume entry; readings D1–D6.
 
 ---
 

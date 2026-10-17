@@ -1,0 +1,156 @@
+/* FirstSlip: styled after Apple's Human Interface Guidelines (system font, grouped
+   inset lists, system colours, large titles). Light and dark themes share one set of
+   tokens; the toggle sets data-theme on <html>, otherwise the system setting wins. */
+:root {
+  --bg: #f2f2f7;              /* systemGroupedBackground */
+  --surface: #ffffff;         /* secondarySystemGroupedBackground */
+  --surface-2: #f2f2f7;
+  --fill: rgba(118,118,128,.12);   /* tertiarySystemFill */
+  --line: rgba(60,60,67,.18);      /* separator */
+  --ink: #000000;             /* label */
+  --ink-2: rgba(60,60,67,.6); /* secondaryLabel */
+  --muted: rgba(60,60,67,.3); /* tertiaryLabel */
+  --accent: #007aff;          /* systemBlue */
+  --good: #248a3d; --good-mark: #34c759; --good-bg: rgba(52,199,89,.14);   /* systemGreen */
+  --bad: #d70015; --bad-mark: #ff3b30; --bad-bg: rgba(255,59,48,.12);      /* systemRed */
+  --guess: #c93400; --guess-mark: #ff9500; --guess-bg: rgba(255,149,0,.12); /* systemOrange */
+  --bar: rgba(249,249,249,.78);
+  --shadow: 0 1px 2px rgba(0,0,0,.04), 0 8px 24px rgba(0,0,0,.04);
+  --radius: 14px;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #000000; --surface: #1c1c1e; --surface-2: #2c2c2e; --fill: rgba(118,118,128,.24);
+    --line: rgba(84,84,88,.6); --ink: #ffffff; --ink-2: rgba(235,235,245,.6); --muted: rgba(235,235,245,.3);
+    --accent: #0a84ff; --good: #30d158; --good-mark: #30d158; --good-bg: rgba(48,209,88,.16);
+    --bad: #ff6961; --bad-mark: #ff453a; --bad-bg: rgba(255,69,58,.16);
+    --guess: #ffb340; --guess-mark: #ff9f0a; --guess-bg: rgba(255,159,10,.14);
+    --bar: rgba(22,22,24,.72); --shadow: none; color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #000000; --surface: #1c1c1e; --surface-2: #2c2c2e; --fill: rgba(118,118,128,.24);
+  --line: rgba(84,84,88,.6); --ink: #ffffff; --ink-2: rgba(235,235,245,.6); --muted: rgba(235,235,245,.3);
+  --accent: #0a84ff; --good: #30d158; --good-mark: #30d158; --good-bg: rgba(48,209,88,.16);
+  --bad: #ff6961; --bad-mark: #ff453a; --bad-bg: rgba(255,69,58,.16);
+  --guess: #ffb340; --guess-mark: #ff9f0a; --guess-bg: rgba(255,159,10,.14);
+  --bar: rgba(22,22,24,.72); --shadow: none; color-scheme: dark;
+}
+
+* { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+html { -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0; background: var(--bg); color: var(--ink);
+  font: 17px/1.47 -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", system-ui, sans-serif;
+  letter-spacing: -0.022em; -webkit-font-smoothing: antialiased;
+  transition: background-color .25s ease, color .25s ease;
+}
+a { color: var(--accent); text-decoration: none; }
+a:hover { text-decoration: underline; }
+
+/* Navigation bar: translucent, sticky, hairline below. */
+.bar {
+  position: sticky; top: 0; z-index: 10; background: var(--bar);
+  -webkit-backdrop-filter: saturate(180%) blur(20px); backdrop-filter: saturate(180%) blur(20px);
+  border-bottom: .5px solid var(--line);
+}
+.bar-inner { max-width: 680px; margin: 0 auto; padding: 10px 16px; display: flex; align-items: center; gap: 12px; }
+.brand { font-weight: 600; font-size: 17px; color: var(--ink); display: flex; align-items: center; gap: 8px; }
+.brand-dot { width: 22px; height: 22px; border-radius: 6px; background: linear-gradient(135deg, #0a84ff, #30d158); }
+.bar nav { margin-left: auto; display: flex; align-items: center; gap: 6px; }
+.bar nav a { font-size: 15px; padding: 6px 8px; }
+
+/* Theme toggle: a small segmented control. */
+.seg { display: inline-flex; background: var(--fill); border-radius: 9px; padding: 2px; }
+.seg button {
+  border: 0; background: transparent; color: var(--ink); width: 34px; height: 28px; border-radius: 7px;
+  display: grid; place-items: center; cursor: pointer; padding: 0; min-height: 0;
+}
+.seg button[aria-pressed="true"] { background: var(--surface); box-shadow: 0 1px 3px rgba(0,0,0,.12), 0 0 0 .5px rgba(0,0,0,.04); }
+.seg svg { width: 16px; height: 16px; }
+
+.wrap { max-width: 680px; margin: 0 auto; padding: 8px 16px 40px; }
+.large-title { font-size: 34px; line-height: 1.12; font-weight: 700; letter-spacing: -0.03em; margin: 22px 0 6px; }
+.lead { color: var(--ink-2); margin: 0 0 24px; font-size: 17px; }
+
+/* Grouped inset sections. */
+.section-title { font-size: 13px; text-transform: uppercase; letter-spacing: .02em; color: var(--ink-2); margin: 0 16px 7px; font-weight: 400; }
+.section-foot { font-size: 13px; color: var(--ink-2); margin: 7px 16px 0; letter-spacing: -0.005em; }
+.group { margin-bottom: 28px; }
+.card { background: var(--surface); border-radius: var(--radius); box-shadow: var(--shadow); overflow: hidden; }
+.card.pad { padding: 14px 16px; }
+
+/* Maths fields. */
+math-field {
+  width: 100%; min-width: 0; font-size: 21px; padding: 8px 2px; border: 0; background: transparent; color: var(--ink);
+  --caret-color: var(--accent); --selection-background-color: rgba(0,122,255,.22); --contains-highlight-background-color: transparent;
+  outline: none;
+}
+math-field:focus-within { outline: none; }
+math-field::part(menu-toggle) { display: none; }
+math-field::part(virtual-keyboard-toggle) { color: var(--ink-2); }
+.field-row { padding: 6px 16px; border-bottom: .5px solid var(--line); }
+.field-row:focus-within { box-shadow: inset 3px 0 0 var(--accent); }
+math-field.ro { display: inline-block; width: auto; padding: 0 2px; font-size: 17px; vertical-align: middle; }
+math-field.ro::part(virtual-keyboard-toggle) { display: none; }
+
+/* Step rows: number, field, status, remove. */
+.step { display: grid; grid-template-columns: 26px 1fr 28px 28px; align-items: center; gap: 8px;
+  padding: 4px 12px 4px 16px; position: relative; transition: background-color .2s ease; }
+.step + .step::before { content: ""; position: absolute; top: 0; left: 50px; right: 0; border-top: .5px solid var(--line); }
+.step:focus-within { background: var(--surface-2); }
+.step .num { color: var(--ink-2); font-size: 15px; font-variant-numeric: tabular-nums; text-align: right; }
+.step .mark { width: 24px; height: 24px; display: grid; place-items: center; }
+.step .mark svg { width: 24px; height: 24px; }
+.step.same .mark { color: var(--good-mark); }
+.step.changed .mark { color: var(--bad-mark); }
+.step.unreadable .mark, .step.incomparable .mark { color: var(--muted); }
+.step.changed { background: var(--bad-bg); }
+.step .note { grid-column: 2 / 5; font-size: 13px; color: var(--ink-2); margin: -4px 0 6px; }
+.step.changed .note { color: var(--bad); }
+.step .remove { width: 28px; height: 28px; min-height: 0; padding: 0; border: 0; border-radius: 50%; background: transparent;
+  color: var(--muted); display: grid; place-items: center; cursor: pointer; }
+.step .remove:hover { background: var(--fill); color: var(--ink-2); }
+.step .remove svg { width: 14px; height: 14px; }
+.list-action { display: flex; align-items: center; gap: 8px; width: 100%; border: 0; border-top: .5px solid var(--line);
+  background: transparent; color: var(--accent); font: inherit; padding: 12px 16px; cursor: pointer; text-align: left; }
+.list-action:hover { background: var(--surface-2); }
+.list-action svg { width: 20px; height: 20px; }
+
+/* Buttons. */
+button { font: inherit; letter-spacing: inherit; }
+.btn { border: 0; border-radius: 980px; padding: 8px 16px; font-size: 15px; font-weight: 500; cursor: pointer; min-height: 34px;
+  background: var(--fill); color: var(--accent); transition: transform .1s ease, opacity .2s ease; }
+.btn:active { transform: scale(.97); }
+.btn.primary { background: var(--accent); color: #fff; font-size: 17px; font-weight: 600; padding: 14px 20px; width: 100%; border-radius: 12px; }
+.btn.primary:disabled { opacity: .45; cursor: default; transform: none; }
+.btn.plain { background: transparent; padding-left: 0; padding-right: 0; }
+.row { display: flex; flex-wrap: wrap; gap: 8px; }
+.toolbar { display: flex; gap: 8px; padding: 10px 16px 12px; flex-wrap: wrap; }
+
+/* Feedback cards. */
+.panel { background: var(--surface); border-radius: var(--radius); box-shadow: var(--shadow); padding: 16px; margin-bottom: 14px; animation: rise .3s ease both; }
+@keyframes rise { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+.panel h2 { font-size: 17px; font-weight: 600; margin: 0 0 6px; display: flex; align-items: center; gap: 8px; }
+.panel h2 svg { width: 22px; height: 22px; flex: none; }
+.panel p { margin: 6px 0; }
+.verified h2 svg { color: var(--good-mark); }
+.verified.has-error h2 svg { color: var(--bad-mark); }
+.guess h2 svg { color: var(--guess-mark); }
+.tag { font-size: 12px; font-weight: 600; letter-spacing: 0; padding: 2px 8px; border-radius: 980px; margin-left: auto; }
+.tag.ok { background: var(--good-bg); color: var(--good); }
+.tag.maybe { background: var(--guess-bg); color: var(--guess); }
+.warn { font-size: 15px; color: var(--bad); }
+.small { font-size: 15px; color: var(--ink-2); }
+.err { color: var(--bad); }
+.status { display: flex; align-items: center; gap: 8px; font-size: 13px; color: var(--ink-2); margin: 10px 16px 0; }
+.spinner { width: 14px; height: 14px; border-radius: 50%; border: 2px solid var(--fill); border-top-color: var(--ink-2); animation: spin .8s linear infinite; }
+@keyframes spin { to { transform: rotate(360deg); } }
+footer { color: var(--ink-2); font-size: 13px; padding: 8px 16px 32px; max-width: 680px; margin: 0 auto; }
+
+@media (max-width: 480px) {
+  .large-title { font-size: 30px; margin-top: 16px; }
+  math-field { font-size: 19px; }
+}
+@media (prefers-reduced-motion: reduce) { * { animation: none !important; transition: none !important; } }
