@@ -167,24 +167,24 @@ MalAlgoPy's code is not public (every candidate GitHub repo returns 404), so the
 
 ### Tasks
 - [x] Write **one prompt template** and the **output parser** (fixed format: step number or 0, then one sentence). *(`core/prompts.py`; API runner `scripts/phase2_run.py`, Colab vLLM notebook `notebooks/phase2_colab_vllm.ipynb`.)*
-- [ ] **Freeze both** using the dev splits only (synthetic dev + VtG dev).
+- [x] **Freeze both** using the dev splits only (synthetic dev + VtG dev). *(Prompt p2-v1; judge j-v1, Amendment 5.)*
 - [x] Run **E1** on all three models across **both synthetic tests and VtG test**, caching every response. Report VtG results on all 802 rows **and separately without the "None of the above" category** (8.7% of VtG, least consistent labels).
 - [x] Run **E2** on the synthetic tests.
 - [x] Run **E3** on the synthetic tests (true / one-off / random-wrong location); compute deference rate.
 - [x] Build the **faithfulness extractor** (rule-based: finds the step the feedback sentence mentions). *(`core/faithfulness.py`; misconception mapping in `core/misconceptions.py`.)*
-- [ ] **Audit 100 items by hand** for faithfulness; report extractor–hand agreement.
-- [ ] Audit misconception-name mapping on **100 items by hand**.
-- [ ] Produce **result tables with bootstrap intervals** (paired bootstrap, McNemar, Holm).
-- [ ] Run the full grid **only on the final frozen prompt** (API cost control).
+- [x] **Audit 100 items by hand** for faithfulness; report extractor–hand agreement. *(`results/phase2/audit.json`.)*
+- [x] Audit misconception-name mapping on **100 items by hand**.
+- [x] Produce **result tables with bootstrap intervals** (paired bootstrap, McNemar, Holm). *(`results/phase2/tables.md`.)*
+- [x] Run the full grid **only on the final frozen prompt** (API cost control).
 
 ### Reading (Phases 2 and 4)
 - [ ] **C1** — *ProcessBench: Identifying Process Errors in Mathematical Reasoning* (Zheng et al., 2024) — [link](https://arxiv.org/abs/2412.06559). Sections 1–3. Source of the error F1 metric.
 - [ ] **C2** — *Let's Verify Step by Step* (Lightman et al., 2023). Sections 1–3. Process supervision and PRM800K.
 
 ### Gate 2
-- [ ] **All E1–E3 tables filled**, and
-- [ ] the faithfulness extractor **agrees with hand labels on ≥ 90%** of audited items.
-- [ ] Fill in Phase 2 in [PROGRESS.md](PROGRESS.md).
+- [x] **All E1–E3 tables filled**, and
+- [x] the faithfulness extractor **agrees with hand labels on ≥ 90%** of audited items. *(Passed by the LLM judge, which replaced the extractor under Amendment 5: 97% (93–100%) agreement. The rule-based extractor reached 21%.)*
+- [x] Fill in Phase 2 in [PROGRESS.md](PROGRESS.md).
 
 ---
 
@@ -307,7 +307,7 @@ Short version (stopped at cut line): replace the last sentence with *"Deployed a
 |---|---|---|---|
 | 1 | Open-source generator and SymPy checker | 1 | [x] |
 | 2 | Synthetic benchmark (seen + held-out) with dataset card | 1 | [x] |
-| 3 | Prompted results for three models (localization, faithfulness, deference) | 2 | [ ] |
+| 3 | Prompted results for three models (localization, faithfulness, deference) | 2 | [x] |
 | 4 | Live student app separating verified feedback from guesses | 3 | [ ] |
 | 5 | Trained checkpoints (SFT, GRPO; 3 seeds) with held-out and VtG results | 4–5 | [ ] |
 | 6 | 4–6 page technical report | 6 | [ ] |
