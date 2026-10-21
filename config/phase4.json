@@ -1,0 +1,30 @@
+{
+  "model": {"name": "qwen-2b", "id": "Qwen/Qwen3.5-2B", "fallback_name": "qwen3-1.7b", "fallback_id": "Qwen/Qwen3-1.7B"},
+  "seeds": [0, 1, 2],
+  "lora": {"r": 16, "lora_alpha": 32, "lora_dropout": 0.0},
+  "sft": {
+    "learning_rate": 1e-4,
+    "num_train_epochs": 1,
+    "per_device_train_batch_size": 16,
+    "gradient_accumulation_steps": 1,
+    "warmup_steps": 0.03,
+    "lr_scheduler_type": "cosine",
+    "max_length": 1024
+  },
+  "grpo": {
+    "learning_rate": 2e-5,
+    "max_steps": 400,
+    "num_generations": 8,
+    "per_device_train_batch_size": 64,
+    "gradient_accumulation_steps": 2,
+    "max_completion_length": 96,
+    "temperature": 1.0,
+    "beta": 0.0,
+    "warmup_steps": 0.03,
+    "lr_scheduler_type": "constant_with_warmup",
+    "save_steps": 50,
+    "vllm_gpu_memory_utilization": 0.3
+  },
+  "eval": {"temperature": 0.0, "max_tokens": 256, "thinking": false, "max_model_len": 4096,
+           "splits": ["dev", "test_seen", "test_heldout", "vtg_test"]}
+}
