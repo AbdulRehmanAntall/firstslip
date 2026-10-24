@@ -216,9 +216,12 @@ _Planned: 28 Oct – 3 Nov 2026, ~15 h · Gate: all E1–E3 tables filled; extra
 ## Phase 3 — Student app (cut line)
 _Planned: 4 – 9 Nov 2026, ~12 h · Gate: a friend can solve, make a mistake and get feedback on a phone_
 
-- **Status:** in progress. App deployed as a static Space: https://huggingface.co/spaces/AbdulRehman420/firstslip. Gate not yet checked.
+- **Status:** ✅ complete. App deployed as a static Space: https://huggingface.co/spaces/AbdulRehman420/firstslip.
 - **Dates / hours:** started 17 Oct 2026.
-- **Gate:** not yet checked (needs a friend on a phone).
+- **Gate:** **passed** on 24 Oct 2026.
+  - Friend test: a friend solved a problem on a phone, made a mistake and got the checker's feedback (reported by the author; no observations recorded).
+  - Deliverables 1–4 exist: generator + checker (`core/`), synthetic benchmark + dataset card (`data/synthetic/README.md`), prompted results (`results/phase2/`), live app.
+  - Resume entry written (below).
 - **What was done:**
   - `app/main.py`: FastAPI. `POST /api/check` takes the problem and steps (MathLive LaTeX) and returns a status per step (`same` / `changed` / `unreadable` / `incomparable` / `empty`), the checker's verified claims, and, when a step is wrong, the model's explanation. `/` is the checker, `/results` the E1–E3 findings. No API docs routes.
   - `app/checking.py`: the Phase 1 checker (`core.checker.parse_line` / `same`, unchanged), applied line by line. Verified claims: the first step that changes the answer, with the solution before and after it; unreadable lines; or "every step keeps the solution".
@@ -230,7 +233,11 @@ _Planned: 4 – 9 Nov 2026, ~12 h · Gate: a friend can solve, make a mistake an
   - Browser build: the page runs the checker itself with Pyodide 0.26.4, loading `core/checker.py`, `app/checking.py` and `app/mathnorm.py` unchanged and SymPy 1.14.0 / mpmath 1.3.0 / lark 1.3.1 from PyPI (the study's versions). First load about 10 s, then each check takes 40–600 ms (measured in Node's Pyodide on the five test cases; same results as the server). The model's guess comes from `POST api/explain` when a server provides it; on static hosting the page says no model is attached.
   - `scripts/deploy_space.py`: static bundle by default (`space/static/README.md`, `app/static/`, `py/<the five files>`); `--docker` deploys the FastAPI server (`space/docker/`).
   - 30 new tests (`tests/test_app.py`); 89 in total pass.
-- **Key results / numbers:**
+- **Key results / numbers:** one manual end-to-end test on a phone (the friend test). Automated: 30 app tests; the browser checker matches the server on the five test cases.
+- **Resume entry.** The cut-line version, as Gate 3 requires:
+  > **FirstSlip: verifiable error localization for LLM tutors** (live app, GitHub). Built a SymPy step checker and a controlled benchmark of 10,500 algebra solutions with known first errors across 19 misconception types. Showed that prompted LLMs locate the first error in 35–95% of cases (Qwen3.5 2B–27B) and adopt a deliberately wrong verifier location in 2–100% of cases. Deployed a tutor that marks which feedback the checker has verified.
+- **Resume entry, current version** (Phase 4 done; to be finalised in Phase 6):
+  > … Fine-tuned a 2B model using the checker as label and reward: first-error accuracy on held-out misconception types rose from 27% to 68% with SFT and 49% with GRPO, but neither transferred to 802 teacher-annotated solutions (base 31%, SFT 19%, GRPO 28%).
 - **Artifacts:** Space https://huggingface.co/spaces/AbdulRehman420/firstslip (app: https://abdulrehman420-firstslip.static.hf.space, results page: `/results.html`).
 - **Deviations from plan:**
   - **Static Space, checker only.** Hugging Face now requires PRO to host Docker or Gradio Spaces, even on free CPU (HTTP 402 on 17 Oct). The deployed app is therefore a static Space: the checker runs in the browser and there is no model explanation. The verified / not-verified split is in the page, but only the verified panel has content online. The per-session cap is not needed there, since nothing runs on a server; the caps are in the server version (`app/main.py`), which can be deployed with `--docker` if PRO is added.
@@ -241,8 +248,10 @@ _Planned: 4 – 9 Nov 2026, ~12 h · Gate: a friend can solve, make a mistake an
 - **Carry-over:**
   - [x] Deploy the Space (static).
   - [ ] Optional: HF PRO + inference credit, then `python scripts/deploy_space.py --repo AbdulRehman420/firstslip --docker` and a read token as the `HF_TOKEN` secret, to add the model's explanation.
-  - [ ] Gate: a friend solves a problem on a phone, makes a mistake and gets feedback.
-  - [ ] Short resume entry; readings D1–D6.
+  - [x] Gate: a friend solves a problem on a phone, makes a mistake and gets feedback (24 Oct).
+  - [x] Short resume entry.
+  - [ ] Readings D1–D6 (optional).
+- **Order deviation:** Gate 3 was closed on 24 Oct, after Phase 4 had already run (21–24 Oct).
 
 ---
 

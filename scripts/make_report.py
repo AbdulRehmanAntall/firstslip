@@ -499,7 +499,7 @@ def build():
                      ["0 Setup, VtG split, baselines, pre-registration", "Done"],
                      ["1 Generator and SymPy checker (100% gate)", "Done"],
                      ["2 Prompted experiments E1–E3", "Done"],
-                     ["3 Student app (static Hugging Face Space)", "Deployed; friend test on a phone outstanding"],
+                     ["3 Student app (static Hugging Face Space)", "Done; friend test passed on a phone"],
                      ["4 Training E4 (SFT, GRPO, 3 seeds)", "Done; Gate 4 passed"],
                      ["5 Transfer and faithfulness E5, E6", "Next: VtG breakdowns, faithfulness of trained feedback"],
                      ["6 Release and write-up", "Dataset release, 4–6 page paper, app video"]],

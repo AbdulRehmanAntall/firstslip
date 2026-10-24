@@ -208,10 +208,10 @@ MalAlgoPy's code is not public (every candidate GitHub repo returns 404), so the
 - [ ] **D6** — *MathDial* (Macina et al., Findings of EMNLP 2023). Section 3: how VtG student solutions were produced.
 
 ### Gate 3 — CUT LINE (9 Nov)
-- [ ] **A friend can solve a problem, make a mistake and get feedback on a phone.**
-- [ ] Deliverables 1–4 exist (generator + checker, synthetic benchmark + dataset card, prompted results, live app).
-- [ ] Write the **short resume entry** (see Phase 6) — the project is presentable from here.
-- [ ] Fill in Phase 3 in [PROGRESS.md](PROGRESS.md).
+- [x] **A friend can solve a problem, make a mistake and get feedback on a phone.**
+- [x] Deliverables 1–4 exist (generator + checker, synthetic benchmark + dataset card, prompted results, live app).
+- [x] Write the **short resume entry** (see Phase 6) — the project is presentable from here.
+- [x] Fill in Phase 3 in [PROGRESS.md](PROGRESS.md).
 
 ---
 
