@@ -249,16 +249,61 @@ _Planned: 4 – 9 Nov 2026, ~12 h · Gate: a friend can solve, make a mistake an
 ## Phase 4 — Training E4
 _Planned: 10 – 17 Nov 2026, ~16 h · Go/no-go: 12 Nov · Gate: three seeds per condition evaluated, held-out results and position check reported_
 
-- **Status:** not started
-- **Dates / hours:**
-- **Go/no-go decision (12 Nov):** GRPO kept / switched to rejection-sampling FT — reason:
-- **Gate:**
-- **What was done:**
-- **Key results / numbers:** (Base / SFT / GRPO mean ± sd on seen and held-out tests, position-bias check, GPU hours used)
-- **Artifacts:**
-- **Deviations from plan:**
-- **Issues / open questions:**
-- **Carry-over:**
+- **Status:** ✅ complete
+- **Dates / hours:** code 21 Oct, training and evaluation 23–24 Oct 2026, about 17 days ahead of plan. GPU: about 5 h of training on one A100 40 GB (SFT 8 min per seed, GRPO 1.5 h per seed) plus about 1.5 h of evaluation.
+- **Go/no-go decision:** **GRPO kept.** For seed 0, mean reward rose from 0.46 (first 20 steps) to 0.95 (last 20). Dev first-error accuracy is above base (33.1%) at every checkpoint, from 77.9% at step 50 to 85.1% at step 400.
+- **Gate:** **passed.** Three seeds each for SFT and GRPO, plus the greedy base model, are evaluated on dev, test-seen, test-held-out and VtG test. The position check is in `results/phase4/f_position.png`.
+
+**What was done**
+- `core/phase4.py`: the step-only SFT target, the checker reward (step + format), and training rows labelled by the SymPy checker. Pre-registered as Amendment 6 before any run.
+- `scripts/phase4_prepare.py`: 8,000 train and 500 dev rows. The checker matches the generator label on every row. Hashes are in `data/phase4/manifest.json`.
+- `scripts/phase4_train.py`: TRL 1.16 SFT/GRPO with LoRA; GRPO generates with vLLM in colocate mode. `scripts/phase4_eval.py` merges each adapter and decodes greedily with the frozen p2-v1 prompt. `scripts/phase4_score.py` computes the tables, H3, H4 and the position check.
+- `notebooks/phase4_colab_train.ipynb`: smoke tests, then base, SFT ×3, GRPO seed 0 with dev checkpoints, then GRPO seeds 1–2.
+
+**Key results.** Mean ± sd over 3 seeds, in %. Base is one greedy run. Full tables are in `results/phase4/tables.md`.
+
+| Split | Condition | First-error | Clean | Error F1 | Within-one |
+|---|---|---|---|---|---|
+| Test-seen | Base | 34.8 | 0.4 | 0.8 | 55.2 |
+| | SFT | 99.6 ± 0.3 | 99.5 ± 0.6 | 99.5 ± 0.3 | 99.6 ± 0.3 |
+| | GRPO | 84.6 ± 3.1 | 73.5 ± 15.4 | 78.2 ± 9.7 | 88.3 ± 1.2 |
+| Test-held-out | Base | 26.9 | 0.0 | 0.0 | 40.8 |
+| | SFT | 67.9 ± 3.9 | 98.0 ± 0.8 | 80.1 ± 2.6 | 81.1 ± 1.4 |
+| | GRPO | 48.6 ± 21.9 | 59.7 ± 20.4 | 51.6 ± 15.3 | 68.5 ± 20.8 |
+| VtG test | Base | 31.2 | – | – | 58.5 |
+| | SFT | 18.6 ± 4.3 | – | – | 42.1 ± 6.1 |
+| | GRPO | 27.8 ± 2.3 | – | – | 54.7 ± 2.1 |
+
+- **H3: supported for both, by the pre-registered F1 rule.**
+  - Test-seen F1 gain over base: SFT +98.7 (sd 0.3), GRPO +77.4 (sd 9.7).
+  - Held-out gain: SFT +80.1 and GRPO +51.6, both at least half the seen gain.
+  - **But the prediction that only GRPO would hold its gain is not borne out.** SFT is better than GRPO on every synthetic metric, with gaps larger than either sd. GRPO is also much less stable across seeds: held-out first-error is 73.1 / 30.9 / 41.7%.
+- **Caveat on the F1 rule (not pre-registered).** Base never answers "no error", so its F1 is 0, and part of every F1 gain is just learning to say 0 on clean items. On first-error accuracy alone, the held-out gain is 63% of the seen gain for SFT (+41.0 vs +64.8), but 44% for GRPO (+21.7 vs +49.8), below half.
+- **Anti-hypothesis (position prior): rejected for SFT; GRPO is mixed.**
+  - Held-out first-error vs. the 37.5% position-only baseline: SFT beats it on every seed (72.1 / 64.5 / 66.9). GRPO's mean beats it (48.6), but seed 1 (30.9) does not.
+  - The predicted-step distributions of both trained models follow the gold distribution. The **base** model is the one with a position bias: it answers step 1 on 88% (seen) and 93% (held-out) of incorrect items.
+- **Error pattern on held-out.** SFT is never too early or too late: when it misses, it says "no error" (27–35% of incorrect items). GRPO misses in every direction.
+- **H4 (computed early; E5 is Phase 5): not supported.** Transfer to VtG is negative for both: SFT −12.6 (sd 4.3), GRPO −3.4 (sd 2.3). SFT answers "no error" on 40–51% of VtG items, all of which contain an error; base does so on 7%.
+
+**Artifacts**
+- Code commit `197b6e7`, which all 45 run logs carry, with no local changes.
+- Run logs: `runs/*_phase4train_*.jsonl` (config, versions, model SHA `15852e8c16…`, full trainer log history) and `runs/*_phase4_*.jsonl` (evaluations, Phase 2 record format).
+- `results/phase4/tables.{json,md}` and `results/phase4/f_position.png`.
+
+**Deviations from plan**
+- Code was written before the C3/C4 reading (agreed 21 Oct), and Phase 4 ran before Gate 3 was closed.
+- Unsloth was not used; plain TRL + PEFT on an A100 instead (Amendment 6, item 4).
+- Qwen3.5-2B trained without problems, so the Qwen3-1.7B fallback was not needed.
+
+**Issues / open questions**
+- **GRPO saturates.** By the last 20 steps, 94–99% of groups have zero reward variance (`frac_reward_zero_std`), so the final steps carry almost no learning signal. Clean accuracy jumps between checkpoints (dev: 0.8% at step 200, 84.8% at 350, 69.6% at 400), which explains the large sd.
+- **Long feedback.** Every trained output has a feedback sentence, but some run on to the 256-token cap (SFT seed 0: 42% on VtG, base 7%). Feedback length must be reported with E6, and the judge should read only the first sentence.
+- **SFT near 100% on test-seen** is expected: the generator's 15 seen misconceptions are learnable patterns. Held-out and VtG are the informative splits.
+
+**Carry-over to Phase 5**
+- E5: the VtG results are already in the run logs. Add the "None of the above" and per-category breakdowns.
+- E6: run the faithfulness judge (j-v1) on the trained models' feedback, Base vs. SFT vs. GRPO.
+- Resume numbers (Phase 6 template): GRPO held-out first-error 26.9% → 48.6% (SFT 67.9%), VtG 27.8% (SFT 18.6%, base 31.2%).
 
 ---
 

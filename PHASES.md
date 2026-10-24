@@ -235,14 +235,14 @@ MalAlgoPy's code is not public (every candidate GitHub repo returns 404), so the
 Nothing in the reward looks at the feedback sentence — this is what makes E6 a clean test.
 
 ### Tasks
-- [ ] Read **C3** — *DeepSeekMath* (Shao et al., 2024), GRPO section only.
-- [ ] Read **C4** — [TRL GRPOTrainer docs](https://huggingface.co/docs/trl/main/grpo_trainer), custom reward function section, **before writing any training code**.
-- [ ] **SFT baseline** on the train split (one run per seed).
-- [ ] **GRPO** with the checker reward, starting from the **base model**.
-- [ ] **Go/no-go on 12 Nov:** if mean reward has not risen **and** dev accuracy is not above the base model → switch to **rejection-sampling fine-tuning** (sample several answers, keep those the checker confirms, fine-tune on them).
-- [ ] **Three seeds** for each trained condition (Base vs. SFT vs. GRPO/RFT).
-- [ ] Evaluate on **both synthetic tests** (seen + held-out).
-- [ ] **Plot the distribution of predicted steps** to check for position bias; compare against the position-only baseline (anti-hypothesis).
+- [x] Read **C3** — *DeepSeekMath* (Shao et al., 2024), GRPO section only.
+- [x] Read **C4** — [TRL GRPOTrainer docs](https://huggingface.co/docs/trl/main/grpo_trainer), custom reward function section, **before writing any training code**.
+- [x] **SFT baseline** on the train split (one run per seed).
+- [x] **GRPO** with the checker reward, starting from the **base model**.
+- [x] **Go/no-go on 12 Nov:** if mean reward has not risen **and** dev accuracy is not above the base model → switch to **rejection-sampling fine-tuning** (sample several answers, keep those the checker confirms, fine-tune on them).
+- [x] **Three seeds** for each trained condition (Base vs. SFT vs. GRPO/RFT).
+- [x] Evaluate on **both synthetic tests** (seen + held-out).
+- [x] **Plot the distribution of predicted steps** to check for position bias; compare against the position-only baseline (anti-hypothesis).
 
 ### Fallbacks
 - GRPO has no signal (every sample in a group gets the same reward → zero update): start with easier items (two-step equations), raise samples per prompt, or switch to rejection-sampling fine-tuning.
@@ -250,8 +250,8 @@ Nothing in the reward looks at the feedback sentence — this is what makes E6 a
 - Colab compute units run low: keep runs < 3 h.
 
 ### Gate 4
-- [ ] **Three seeds per condition evaluated**, with **held-out results** and the **position check** reported.
-- [ ] Fill in Phase 4 in [PROGRESS.md](PROGRESS.md).
+- [x] **Three seeds per condition evaluated**, with **held-out results** and the **position check** reported.
+- [x] Fill in Phase 4 in [PROGRESS.md](PROGRESS.md).
 
 ---
 
